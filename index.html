@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>درخشا | هوش مصنوعی مغز‌محور</title>
+  <meta name="description" content="درخشا — معماری هوش مصنوعی ماژولار با جنگل دانش، درخت‌های مفهومی و جستجوی دوطرفه" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo" onclick="showView('chat')" title="درخشا">
+        <svg class="logo-svg" viewBox="0 0 64 64" width="40" height="40">
+          <circle cx="32" cy="32" r="30" fill="url(#g1)" opacity="0.3"/>
+          <path d="M32 52 L32 28" stroke="#2dd4bf" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M32 36 L44 26" stroke="#2dd4bf" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M32 42 L46 38" stroke="#14b8a6" stroke-width="2" stroke-linecap="round"/>
+          <path d="M32 36 L20 26" stroke="#2dd4bf" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M32 42 L18 38" stroke="#14b8a6" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="44" cy="26" r="4.5" fill="#5eead4"/>
+          <circle cx="20" cy="26" r="4.5" fill="#5eead4"/>
+          <circle cx="46" cy="38" r="3.5" fill="#99f6e4"/>
+          <circle cx="18" cy="38" r="3.5" fill="#99f6e4"/>
+          <circle cx="32" cy="22" r="5.5" fill="#2dd4bf"/>
+          <path d="M32 22 L44 26" stroke="#5eead4" stroke-width="1.2" opacity="0.85"/>
+          <path d="M32 22 L20 26" stroke="#5eead4" stroke-width="1.2" opacity="0.85"/>
+          <circle cx="32" cy="22" r="2.2" fill="#fff"/>
+          <defs>
+            <radialGradient id="g1" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#2dd4bf"/>
+              <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+        </svg>
+        <span class="logo-text">درخشا</span>
+      </div>
+      <nav class="nav">
+        <button class="nav-btn active" data-view="chat" onclick="showView('chat')">گفتگو</button>
+        <button class="nav-btn" data-view="knowledge" onclick="showView('knowledge')">ورود دانش</button>
+        <button class="nav-btn" data-view="keywords" onclick="showView('keywords')">جملات و کلیدواژه</button>
+        <button class="nav-btn" data-view="about" onclick="showView('about')">درباره</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========== CHAT ========== -->
+  <main id="view-chat" class="view active">
+    <div class="chat-wrap">
+      <div class="chat-messages" id="chat-messages">
+        <div class="msg bot">
+          <div class="msg-avatar">
+            <svg viewBox="0 0 64 64" width="26" height="26">
+              <circle cx="32" cy="32" r="28" fill="#134e4a" opacity="0.5"/>
+              <path d="M32 48 L32 28" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round"/>
+              <path d="M32 34 L43 25" stroke="#2dd4bf" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M32 34 L21 25" stroke="#2dd4bf" stroke-width="2.2" stroke-linecap="round"/>
+              <circle cx="43" cy="25" r="3.8" fill="#5eead4"/>
+              <circle cx="21" cy="25" r="3.8" fill="#5eead4"/>
+              <circle cx="32" cy="22" r="4.8" fill="#2dd4bf"/>
+              <circle cx="32" cy="22" r="1.8" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="msg-body">
+            <p>سلام! من <strong>درخشا</strong> هستم 🌳</p>
+            <p>امیدوارم حالتان عالی باشد. من یک معماری هوش مصنوعی مغز‌محور هستم که دانش را با جنگل درخت‌های مفهومی و جستجوی دوطرفه پردازش می‌کنم.</p>
+            <p>می‌توانید دربارهٔ معماری، جنگل دانش، جستجوی هرمی و درختی، Tree-Neuron یا هر مفهوم دیگری بپرسید. بفرمایید چطور کمکتان کنم؟</p>
+          </div>
+        </div>
+      </div>
+      <div class="chat-bar">
+        <div class="chat-input-box">
+          <textarea id="chat-input" rows="1" placeholder="پیام خود را بنویسید..." onkeydown="onChatKey(event)"></textarea>
+          <button class="send-btn" onclick="sendChat()" aria-label="ارسال">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          </button>
+        </div>
+        <p class="chat-note">درخشا نسخهٔ اول — پاسخ‌ها بر اساس معماری طراحی‌شده تولید می‌شوند</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========== KNOWLEDGE INGEST ========== -->
+  <main id="view-knowledge" class="view">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>ورود دانش به جنگل</h2>
+        <p>اسناد، مقالات و کتاب‌ها را اینجا وارد کنید تا Forest Builder Cortex آن‌ها را به درخت‌های دانش اضافه کند.</p>
+      </div>
+      <div class="panel-grid">
+        <div class="card">
+          <h3>افزودن سند / مقاله / کتاب</h3>
+          <form id="form-knowledge">
+            <div class="row-2">
+              <div class="field">
+                <label>نام منبع</label>
+                <input type="text" id="k-source" placeholder="نام کتاب یا مقاله" required />
+              </div>
+              <div class="field">
+                <label>حوزه (درخت)</label>
+                <select id="k-domain">
+                  <option value="فناوری">فناوری و هوش مصنوعی</option>
+                  <option value="فیزیک">فیزیک</option>
+                  <option value="زیست‌شناسی">زیست‌شناسی</option>
+                  <option value="شیمی">شیمی</option>
+                  <option value="ریاضی">ریاضی</option>
+                  <option value="عمومی">اطلاعات عمومی</option>
+                  <option value="سایر">سایر</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label>نویسنده / ناشر (اختیاری)</label>
+              <input type="text" id="k-author" placeholder="نام نویسنده" />
+            </div>
+            <div class="field">
+              <label>متن کامل</label>
+              <textarea id="k-content" rows="10" placeholder="متن سند، فصل کتاب یا مقاله را اینجا قرار دهید..." required></textarea>
+            </div>
+            <div class="actions">
+              <button type="submit" class="btn primary">پردازش و افزودن به جنگل</button>
+              <button type="button" class="btn ghost" onclick="resetKnowledgeForm()">پاک کردن</button>
+            </div>
+          </form>
+        </div>
+        <div class="card">
+          <h3>وضعیت جنگل دانش</h3>
+          <div id="k-log" class="log-box"><div class="log-empty">هنوز سندی اضافه نشده است.</div></div>
+          <div class="stats">
+            <div class="stat"><span id="s-docs">0</span><small>سند</small></div>
+            <div class="stat"><span id="s-concepts">0</span><small>مفهوم</small></div>
+            <div class="stat"><span id="s-trees">6</span><small>درخت فعال</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========== KEYWORDS / SENTENCES ========== -->
+  <main id="view-keywords" class="view">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>ورود جمله و کلیدواژه</h2>
+        <p>جملات ساخت‌یافته را همراه با کلیدواژه‌ها، فاعل، مفعول و فعل وارد کنید تا Language Tree Cortex ساختار آن‌ها را در جنگل دانش ثبت کند.</p>
+      </div>
+      <div class="panel-grid">
+        <div class="card">
+          <h3>ثبت جملهٔ جدید</h3>
+          <form id="form-keywords">
+            <div class="field">
+              <label>جملهٔ کامل</label>
+              <input type="text" id="kw-sentence" placeholder="مثال: هوش مصنوعی شاخه‌ای از علوم رایانه است" required />
+            </div>
+            <div class="row-2">
+              <div class="field">
+                <label>کلیدواژه‌ها (با ویرگول)</label>
+                <input type="text" id="kw-keys" placeholder="هوش مصنوعی, علوم رایانه, شاخه" required />
+              </div>
+              <div class="field">
+                <label>حوزه</label>
+                <select id="kw-domain">
+                  <option value="فناوری">فناوری</option>
+                  <option value="فیزیک">فیزیک</option>
+                  <option value="زیست‌شناسی">زیست‌شناسی</option>
+                  <option value="شیمی">شیمی</option>
+                  <option value="ریاضی">ریاضی</option>
+                  <option value="عمومی">عمومی</option>
+                </select>
+              </div>
+            </div>
+            <div class="row-3">
+              <div class="field">
+                <label>فاعل</label>
+                <input type="text" id="kw-subject" placeholder="هوش مصنوعی" />
+              </div>
+              <div class="field">
+                <label>فعل</label>
+                <input type="text" id="kw-verb" placeholder="است" />
+              </div>
+              <div class="field">
+                <label>مفعول / متمم</label>
+                <input type="text" id="kw-object" placeholder="شاخه‌ای از علوم رایانه" />
+              </div>
+            </div>
+            <div class="field">
+              <label>نوع رابطه (اختیاری)</label>
+              <select id="kw-relation">
+                <option value="is-a">is-a (هست نوعی از)</option>
+                <option value="part-of">part-of (بخشی از)</option>
+                <option value="related-to">related-to (مرتبط با)</option>
+                <option value="causes">causes (باعث می‌شود)</option>
+                <option value="used-for">used-for (استفاده می‌شود برای)</option>
+              </select>
+            </div>
+            <div class="actions">
+              <button type="submit" class="btn primary">ثبت در Language Tree</button>
+              <button type="button" class="btn ghost" onclick="resetKeywordForm()">پاک کردن</button>
+            </div>
+          </form>
+        </div>
+        <div class="card">
+          <h3>جملات ثبت‌شده</h3>
+          <div id="kw-list" class="log-box"><div class="log-empty">هنوز جمله‌ای ثبت نشده است.</div></div>
+          <div class="stats">
+            <div class="stat"><span id="s-sentences">0</span><small>جمله</small></div>
+            <div class="stat"><span id="s-keywords">0</span><small>کلیدواژه</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========== ABOUT ========== -->
+  <main id="view-about" class="view">
+    <div class="about-wrap">
+      <svg class="about-logo" viewBox="0 0 64 64" width="72" height="72">
+        <circle cx="32" cy="32" r="30" fill="#134e4a" opacity="0.4"/>
+        <path d="M32 52 L32 28" stroke="#2dd4bf" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M32 36 L44 26" stroke="#2dd4bf" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M32 42 L46 38" stroke="#14b8a6" stroke-width="2" stroke-linecap="round"/>
+        <path d="M32 36 L20 26" stroke="#2dd4bf" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M32 42 L18 38" stroke="#14b8a6" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="44" cy="26" r="4.5" fill="#5eead4"/>
+        <circle cx="20" cy="26" r="4.5" fill="#5eead4"/>
+        <circle cx="46" cy="38" r="3.5" fill="#99f6e4"/>
+        <circle cx="18" cy="38" r="3.5" fill="#99f6e4"/>
+        <circle cx="32" cy="22" r="5.5" fill="#2dd4bf"/>
+        <circle cx="32" cy="22" r="2.2" fill="#fff"/>
+      </svg>
+      <h1>درخشا</h1>
+      <p class="tagline">معماری هوش مصنوعی ماژولار و مغز‌محور — نسخه اول</p>
+      <div class="about-text">
+        <p>سلام و خوش آمدید.</p>
+        <p>درخشا دانش را با <strong>جنگل دانش</strong>، <strong>درخت‌های مفهومی</strong> و <strong>جستجوی دوطرفه</strong> (جزء→کل و کل→جزء) سازمان‌دهی می‌کند.</p>
+        <p>قشرهای اصلی: Input Cortex، Language Tree Cortex، Forest Builder، Reasoning & Conflict Resolution، Memory، Tree-Neuron و Response Generation.</p>
+        <p>از همراهی‌تان سپاسگزاریم. خدا نگهدارتان.</p>
+      </div>
+      <div class="arch-tags">
+        <span>Modular Neural Cortex</span>
+        <span>جنگل دانش</span>
+        <span>جستجوی هرمی</span>
+        <span>جستجوی درختی</span>
+        <span>Tree-Neuron</span>
+        <span>Forest Builder</span>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
