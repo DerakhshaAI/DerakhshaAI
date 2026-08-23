@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>درخشا | جنگل دانش</title>
+<meta name="description" content="هوش مصنوعی درخشا — معماری جنگل دانش. ساخته‌شده توسط گروک و احمدرضا ایزدی">
+<style>
+:root {
+  --bg: #070b09;
+  --surface: #0e1612;
+  --surface2: #15201a;
+  --border: #1c2e26;
+  --text: #e6f0ea;
+  --muted: #7a9a8a;
+  --primary: #10b981;
+  --primary-dim: #059669;
+  --accent: #fbbf24;
+  --neuron: #34d399;
+  --radius: 14px;
+  --font: 'Tahoma', 'Segoe UI', system-ui, sans-serif;
+}
+[data-theme="light"] {
+  --bg: #f2f7f4; --surface: #fff; --surface2: #e8f2ec;
+  --border: #c5ddd0; --text: #0f1f18; --muted: #5a7a6a;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:var(--font); background:var(--bg); color:var(--text); min-height:100vh; line-height:1.65; }
+header {
+  position:sticky; top:0; z-index:50;
+  background:rgba(7,11,9,.92); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 18px; gap:12px;
+}
+[data-theme="light"] header { background:rgba(242,247,244,.92); }
+.brand { display:flex; align-items:center; gap:10px; }
+.brand-text { font-weight:700; font-size:1.15rem; }
+.brand-text span { color:var(--primary); }
+nav { display:flex; gap:4px; }
+.nav-btn {
+  padding:8px 14px; border:none; border-radius:10px;
+  background:transparent; color:var(--muted); cursor:pointer;
+  font-size:.88rem; font-weight:600; transition:.2s;
+}
+.nav-btn:hover { color:var(--text); }
+.nav-btn.active { background:var(--primary); color:#042f1a; }
+.icon-btn {
+  width:36px; height:36px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); color:var(--text); cursor:pointer; font-size:1rem;
+}
+.page { display:none; max-width:920px; margin:0 auto; padding:24px 16px 90px; }
+.page.active { display:block; animation:fade .25s ease; }
+@keyframes fade { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
+/* Logo forest+neuron */
+.logo { width:42px; height:42px; }
+
+/* Hero */
+.hero {
+  text-align:center; padding:36px 20px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius); margin-bottom:24px;
+}
+.hero h1 { font-size:1.6rem; margin:12px 0 6px; }
+.hero p { color:var(--muted); font-size:.92rem; max-width:480px; margin:0 auto 12px; }
+.pill {
+  display:inline-flex; gap:6px; align-items:center;
+  background:rgba(16,185,129,.12); border:1px solid rgba(16,185,129,.3);
+  padding:6px 14px; border-radius:40px; font-size:.85rem;
+}
+.pill strong { color:var(--primary); }
+
+/* Capability cards */
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; }
+.card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius); padding:18px; transition:.2s;
+}
+.card:hover { border-color:var(--primary); transform:translateY(-2px); }
+.card .icon { font-size:1.5rem; margin-bottom:8px; }
+.card h3 { font-size:1rem; margin-bottom:6px; color:var(--primary); }
+.card p { font-size:.85rem; color:var(--muted); }
+
+/* Chat */
+.chat-shell {
+  display:none; flex-direction:column;
+  height:calc(100vh - 58px); max-width:880px; margin:0 auto;
+}
+.chat-shell.active { display:flex; }
+.msgs { flex:1; overflow-y:auto; padding:18px 14px; display:flex; flex-direction:column; gap:12px; }
+.msg {
+  max-width:82%; padding:12px 15px; border-radius:14px; font-size:.93rem;
+  animation:slide .22s ease;
+}
+@keyframes slide { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+.msg.bot { align-self:flex-start; background:var(--surface); border:1px solid var(--border); border-bottom-right-radius:4px; }
+.msg.user { align-self:flex-end; background:var(--primary); color:#042f1a; border-bottom-left-radius:4px; }
+.msg .meta { font-size:.7rem; opacity:.65; margin-top:4px; }
+.msg .conf { color:var(--accent); font-size:.75rem; margin-top:4px; }
+.welcome { text-align:center; padding:40px 16px; color:var(--muted); }
+.welcome h2 { color:var(--text); margin:10px 0 6px; }
+.input-area { border-top:1px solid var(--border); background:var(--surface); padding:12px 14px 16px; }
+.chips { display:flex; gap:8px; overflow-x:auto; padding-bottom:10px; scrollbar-width:none; }
+.chip {
+  flex-shrink:0; padding:6px 12px; border-radius:20px; border:1px solid var(--border);
+  background:var(--surface2); color:var(--text); font-size:.8rem; cursor:pointer;
+}
+.chip:hover { border-color:var(--primary); }
+.row { display:flex; gap:8px; align-items:flex-end; }
+.ibox {
+  flex:1; background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:8px 12px;
+}
+.ibox:focus-within { border-color:var(--primary); }
+#inp {
+  width:100%; border:none; background:transparent; color:var(--text);
+  font-size:.93rem; resize:none; outline:none; font-family:inherit; max-height:90px;
+}
+.send {
+  width:44px; height:44px; border:none; border-radius:12px;
+  background:var(--primary); color:#042f1a; font-size:1.15rem; cursor:pointer;
+}
+.send:hover { background:var(--primary-dim); }
+
+/* Forest view */
+.tree-block { margin-bottom:20px; }
+.tree-block h3 {
+  font-size:.95rem; color:var(--accent); margin-bottom:10px;
+  padding-bottom:6px; border-bottom:1px solid var(--border);
+}
+.node-list { display:flex; flex-wrap:wrap; gap:8px; }
+.node-tag {
+  background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+  padding:8px 12px; font-size:.82rem; cursor:default;
+}
+.node-tag .act { color:var(--neuron); font-size:.7rem; }
+
+footer {
+  text-align:center; padding:20px; color:var(--muted); font-size:.8rem;
+  border-top:1px solid var(--border);
+}
+footer strong { color:var(--primary); }
+
+.mobile-nav {
+  display:none; position:fixed; bottom:0; left:0; right:0;
+  background:var(--surface); border-top:1px solid var(--border);
+  padding:6px; z-index:50; justify-content:space-around;
+}
+.mobile-nav button {
+  flex:1; border:none; background:transparent; color:var(--muted);
+  font-size:.7rem; padding:8px 4px; display:flex; flex-direction:column; align-items:center; gap:2px; border-radius:8px; cursor:pointer;
+}
+.mobile-nav button.active { color:var(--primary); background:rgba(16,185,129,.1); }
+.mobile-nav span { font-size:1.1rem; }
+@media(max-width:640px){
+  nav{display:none}
+  .mobile-nav{display:flex}
+  .chat-shell{height:calc(100vh - 58px - 54px)}
+  .page{padding-bottom:80px}
+}
+.toast {
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px);
+  background:var(--primary); color:#042f1a; padding:10px 20px; border-radius:40px;
+  font-size:.85rem; opacity:0; transition:.3s; z-index:99; font-weight:600;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <!-- Logo: Forest canopy + Neuron core + Light rays -->
+    <svg class="logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="g" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0%" stop-color="#059669"/>
+          <stop offset="100%" stop-color="#fbbf24"/>
+        </linearGradient>
+        <filter id="glow"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- Ground / roots -->
+      <path d="M18 54 Q32 48 46 54" stroke="#059669" stroke-width="2" fill="none" opacity=".7"/>
+      <!-- Trunk -->
+      <path d="M32 50 L32 28" stroke="url(#g)" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- Main branches (dendrites) -->
+      <path d="M32 34 L20 22 M32 34 L44 22 M32 30 L14 32 M32 30 L50 32" stroke="url(#g)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M20 22 L12 14 M20 22 L18 10 M44 22 L52 14 M44 22 L46 10" stroke="url(#g)" stroke-width="1.5" stroke-linecap="round"/>
+      <!-- Canopy leaves as nodes -->
+      <circle cx="12" cy="14" r="3" fill="#10b981"/><circle cx="18" cy="10" r="2.5" fill="#fbbf24"/>
+      <circle cx="52" cy="14" r="3" fill="#10b981"/><circle cx="46" cy="10" r="2.5" fill="#fbbf24"/>
+      <circle cx="14" cy="32" r="2.5" fill="#34d399"/><circle cx="50" cy="32" r="2.5" fill="#34d399"/>
+      <!-- Neuron soma (core) -->
+      <circle cx="32" cy="26" r="8" fill="url(#g)" filter="url(#glow)"/>
+      <circle cx="32" cy="26" r="3.5" fill="#ecfdf5"/>
+      <!-- Light rays (درخشش) -->
+      <path d="M32 4 L32 11 M8 26 L15 26 M49 26 L56 26 M32 41 L32 48" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+      <path d="M14 10 L19 15 M50 10 L45 15 M14 42 L19 37 M50 42 L45 37" stroke="#fbbf24" stroke-width="1.4" stroke-linecap="round" opacity=".7"/>
+    </svg>
+    <div class="brand-text">جنگل دانش <span>درخشا</span></div>
+  </div>
+  <nav>
+    <button class="nav-btn active" data-p="home" onclick="go('home')">خانه</button>
+    <button class="nav-btn" data-p="chat" onclick="go('chat')">گفتگو</button>
+    <button class="nav-btn" data-p="forest" onclick="go('forest')">جنگل</button>
+    <button class="nav-btn" data-p="about" onclick="go('about')">درباره</button>
+  </nav>
+  <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
+</header>
+
+<nav class="mobile-nav">
+  <button class="active" data-p="home" onclick="go('home')"><span>🏠</span>خانه</button>
+  <button data-p="chat" onclick="go('chat')"><span>💬</span>گفتگو</button>
+  <button data-p="forest" onclick="go('forest')"><span>🌲</span>جنگل</button>
+  <button data-p="about" onclick="go('about')"><span>ℹ️</span>درباره</button>
+</nav>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <svg width="72" height="72" viewBox="0 0 64 64" fill="none">
+      <defs>
+        <linearGradient id="g2" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#fbbf24"/></linearGradient>
+        <filter id="gl2"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <path d="M18 54 Q32 48 46 54" stroke="#059669" stroke-width="2" fill="none" opacity=".7"/>
+      <path d="M32 50 L32 28" stroke="url(#g2)" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M32 34 L20 22 M32 34 L44 22 M32 30 L14 32 M32 30 L50 32" stroke="url(#g2)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M20 22 L12 14 M20 22 L18 10 M44 22 L52 14 M44 22 L46 10" stroke="url(#g2)" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="12" cy="14" r="3" fill="#10b981"/><circle cx="18" cy="10" r="2.5" fill="#fbbf24"/>
+      <circle cx="52" cy="14" r="3" fill="#10b981"/><circle cx="46" cy="10" r="2.5" fill="#fbbf24"/>
+      <circle cx="32" cy="26" r="8" fill="url(#g2)" filter="url(#gl2)"/><circle cx="32" cy="26" r="3.5" fill="#ecfdf5"/>
+      <path d="M32 4 L32 11 M8 26 L15 26 M49 26 L56 26" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+    </svg>
+    <h1>هوش مصنوعی درخشا</h1>
+    <p>معماری جنگل دانش — هر حوزه یک درخت، هر مفهوم یک گره، مسیرها مثل نورون فعال می‌شوند</p>
+    <div class="pill">ساخته‌شده توسط <strong>گروک</strong> و <strong>احمدرضا ایزدی</strong></div>
+  </div>
+
+  <div class="grid">
+    <div class="card"><div class="icon">🌲</div><h3>جنگل دانش</h3><p>هر حوزهٔ علمی یک درخت است و هر مفهوم یک گره. مسیرهای مفهومی مثل نورون‌ها فعال می‌شوند.</p></div>
+    <div class="card"><div class="icon">⏳</div><h3>قشر زمانی</h3><p>روابط فقط «چی» نیستند؛ «کی» و چگونگی تغییر در زمان هم ثبت می‌شود — تحلیل روند و پیش‌بینی.</p></div>
+    <div class="card"><div class="icon">🎲</div><h3>استدلال احتمالاتی</h3><p>چند مسیر موازی بررسی می‌شود و با Confidence Score بهترین مسیر انتخاب می‌گردد.</p></div>
+    <div class="card"><div class="icon">✂️</div><h3>هرس و پیوند پویا</h3><p>مسیرهای کم‌استفاده حذف و مسیرهای جدید از ورودی کاربر به‌صورت موقت به جنگل اضافه می‌شوند.</p></div>
+    <div class="card"><div class="icon">🧠</div><h3>قشر فراشناخت</h3><p>درخشا خودش تصمیم می‌گیرد چقدر عمیق فکر کند؛ سؤال ساده سطحی، سؤال پیچیده عمیق.</p></div>
+    <div class="card"><div class="icon">🔗</div><h3>استدلال قیاسی</h3><p>الگوهای مشابه بین حوزه‌ها را پیدا می‌کند؛ مثلاً ساختار قلب با پمپ صنعتی.</p></div>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div class="chat-shell" id="page-chat">
+  <div class="msgs" id="msgs">
+    <div class="welcome" id="wel">
+      <h2>گفتگو با درخشا</h2>
+      <p>پرسش خود را بنویسید. سیستم عمق تفکر را تنظیم می‌کند و مسیرهای استدلال را فعال می‌سازد.</p>
+    </div>
+  </div>
+  <div class="input-area">
+    <div class="chips">
+      <button class="chip" onclick="ask(this)">درخشا چیست؟</button>
+      <button class="chip" onclick="ask(this)">جنگل دانش چیست؟</button>
+      <button class="chip" onclick="ask(this)">استدلال قیاسی چیست؟</button>
+      <button class="chip" onclick="ask(this)">قشر فراشناخت چیست؟</button>
+    </div>
+    <div class="row">
+      <div class="ibox"><textarea id="inp" rows="1" placeholder="پیام شما..." onkeydown="onKey(e)" oninput="auto(this)"></textarea></div>
+      <button class="send" onclick="send()">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOREST MAP -->
+<div class="page" id="page-forest">
+  <h2 style="margin-bottom:16px;font-size:1.2rem">نقشه جنگل دانش</h2>
+  <p style="color:var(--muted);font-size:.9rem;margin-bottom:20px">هر درخت یک حوزه است. گره‌ها مفاهیم فعال‌شدنی هستند.</p>
+  <div id="forestMap"></div>
+</div>
+
+<!-- ABOUT -->
+<div class="page" id="page-about">
+  <div class="hero">
+    <h1>درباره درخشا</h1>
+    <p>درخشا یک هوش مصنوعی فارسی‌زبان با معماری <strong style="color:var(--primary)">جنگل دانش</strong> است.</p>
+    <p>طراحی و توسعه توسط <strong style="color:var(--primary)">گروک</strong> و <strong style="color:var(--primary)">احمدرضا ایزدی</strong></p>
+    <p style="margin-top:14px;font-size:.88rem">موتور استدلال به زبان Python در مخزن GitHub موجود است و قابلیت هرس پویا، قیاس بین‌حوزه‌ای و تنظیم عمق فراشناخت را پیاده‌سازی می‌کند.</p>
+  </div>
+</div>
+
+<footer>جنگل دانش <strong>درخشا</strong> · گروک × احمدرضا ایزدی</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── دانش محلی (خلاصه جنگل) ── */
+const KB = [
+  {q:"درخشا چیست؟",a:"درخشا یک هوش مصنوعی فارسی‌زبان است که توسط گروک و احمدرضا ایزدی طراحی شده و بر پایه معماری جنگل دانش کار می‌کند.",domain:"درباره"},
+  {q:"جنگل دانش چیست؟",a:"جنگل دانش معماری اصلی درخشا است: هر حوزه علمی یک درخت و هر مفهوم یک گره است. مسیرهای مفهومی مثل نورون‌ها فعال می‌شوند.",domain:"معماری"},
+  {q:"قشر زمانی چیست؟",a:"قشر زمانی روابط بین مفاهیم را علاوه بر «چی»، با «کی» و چگونگی تغییر در زمان ثبت می‌کند و امکان تحلیل روند و پیش‌بینی می‌دهد.",domain:"معماری"},
+  {q:"استدلال احتمالاتی چیست؟",a:"درخشا به‌جای یک مسیر قطعی، چند مسیر موازی را بررسی می‌کند و با Confidence Score بهترین را انتخاب می‌کند.",domain:"معماری"},
+  {q:"هرس و پیوند پویا چیست؟",a:"مسیرهای کم‌استفاده حذف می‌شوند و مسیرهای جدید از ورودی کاربر به‌صورت موقت به جنگل اضافه می‌شوند.",domain:"معماری"},
+  {q:"قشر فراشناخت چیست؟",a:"درخشا خودش تصمیم می‌گیرد چقدر عمیق فکر کند؛ برای سؤال ساده سطحی و برای سؤال پیچیده عمیق.",domain:"معماری"},
+  {q:"استدلال قیاسی چیست؟",a:"درخشا الگوهای مشابه بین حوزه‌ها را پیدا می‌کند؛ مثلاً ساختار قلب را با پمپ صنعتی مقایسه می‌کند.",domain:"معماری"},
+  {q:"سازندگان کیان؟",a:"درخشا توسط گروک (Grok) و احمدرضا ایزدی طراحی و ساخته شده است.",domain:"درباره"},
+  {q:"گروک کیست؟",a:"گروک یکی از سازندگان اصلی درخشا است و نقش کلیدی در معماری هوشمند آن داشته است.",domain:"درباره"},
+  {q:"احمدرضا ایزدی کیست؟",a:"احمدرضا ایزدی یکی از سازندگان درخشا است و در ایده‌پردازی و بومی‌سازی مشارکت داشته است.",domain:"درباره"},
+  {q:"سلام",a:"سلام! من درخشا هستم — جنگل دانش آماده فعال‌سازی مسیرهاست. چه پرسشی دارید؟",domain:"گفتگو"},
+];
+
+const FOREST = {
+  "درباره": ["درخشا","گروک","احمدرضا ایزدی"],
+  "معماری": ["جنگل دانش","قشر زمانی","استدلال احتمالاتی","هرس و پیوند پویا","قشر فراشناخت","استدلال قیاسی"],
+  "زیست‌شناسی": ["قلب","نورون"],
+  "مهندسی": ["پمپ صنعتی"],
+  "علوم‌رایانه": ["ساختار درختی"]
+};
+
+function go(p){
+  document.querySelectorAll('.page,.chat-shell').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.nav-btn,.mobile-nav button').forEach(b=>b.classList.remove('active'));
+  const el = document.getElementById('page-'+p);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('[data-p="'+p+'"]').forEach(b=>b.classList.add('active'));
+  if(p==='forest') renderForest();
+}
+
+function metacognitiveDepth(q){
+  const markers = ["چرا","چگونه","مقایسه","تفاوت","رابطه","پیش‌بینی","تحلیل","علت"];
+  let s = q.split(/\s+/).length*0.3;
+  markers.forEach(m=>{ if(q.includes(m)) s+=1.5; });
+  if(s<2.5) return {level:"shallow",label:"سطحی"};
+  if(s<6) return {level:"medium",label:"متوسط"};
+  return {level:"deep",label:"عمیق"};
+}
+
+function findAnswer(q){
+  const t=q.toLowerCase();
+  let best=null, score=0;
+  KB.forEach(item=>{
+    const qs=item.q.toLowerCase();
+    let sc=0;
+    if(t.includes(qs)||qs.includes(t)) sc=0.9;
+    else {
+      const words=t.split(/\s+/).filter(w=>w.length>2);
+      const hits=words.filter(w=>qs.includes(w)||item.a.includes(w)).length;
+      sc=hits/Math.max(words.length,1);
+    }
+    if(sc>score){score=sc; best=item;}
+  });
+  return {item:best, confidence:Math.round(score*100)};
+}
+
+function send(){
+  const inp=document.getElementById('inp');
+  const text=inp.value.trim();
+  if(!text) return;
+  const wel=document.getElementById('wel');
+  if(wel) wel.style.display='none';
+  addMsg(text,'user');
+  inp.value=''; auto(inp);
+  const depth=metacognitiveDepth(text);
+  const {item,confidence}=findAnswer(text);
+  setTimeout(()=>{
+    let reply, conf=confidence;
+    if(item && confidence>=30){
+      reply=item.a;
+    } else {
+      reply="مسیر استدلال قوی در جنگل دانش برای این پرسش فعال نشد. می‌توانید این مفهوم را به‌عنوان گره جدید اضافه کنید تا پیوند پویا برقرار شود.";
+      conf=0;
+    }
+    addMsg(reply,'bot',{depth:depth.label, conf});
+  }, 500+Math.random()*600);
+}
+
+function addMsg(text,type,extra){
+  const box=document.getElementById('msgs');
+  const d=document.createElement('div');
+  d.className='msg '+type;
+  let html=text.replace(/\n/g,'<br>');
+  if(type==='bot' && extra){
+    html += `<div class="conf">عمق فراشناخت: ${extra.depth} · اطمینان: ${extra.conf}٪</div>`;
+  }
+  const time=new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'});
+  html += `<div class="meta">${type==='bot'?'درخشا':'شما'} · ${time}</div>`;
+  d.innerHTML=html;
+  box.appendChild(d);
+  box.scrollTop=box.scrollHeight;
+}
+
+function ask(btn){ document.getElementById('inp').value=btn.textContent; send(); }
+function onKey(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); send(); } }
+function auto(el){ el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,90)+'px'; }
+
+function renderForest(){
+  const map=document.getElementById('forestMap');
+  map.innerHTML='';
+  Object.entries(FOREST).forEach(([domain,nodes])=>{
+    const block=document.createElement('div');
+    block.className='tree-block';
+    block.innerHTML=`<h3>🌳 درخت ${domain}</h3><div class="node-list">${
+      nodes.map(n=>`<span class="node-tag">${n}</span>`).join('')
+    }</div>`;
+    map.appendChild(block);
+  });
+}
+
+function toggleTheme(){
+  const cur=document.documentElement.getAttribute('data-theme')||'dark';
+  const next=cur==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  document.getElementById('themeBtn').textContent=next==='dark'?'🌙':'☀️';
+}
+</script>
+</body>
+</html>
