@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="هوش مصنوعی درخشا - مجموعه جملات و پرامپت‌های گپ زدن. ساخته شده توسط گروک و احمدرضا ایزدی">
+  <meta name="theme-color" content="#6c5ce7">
+  <title>هوش مصنوعی درخشا | چت و پرامپت‌ها</title>
+  <style>
+    :root {
+      --primary: #6c5ce7;
+      --primary-hover: #5a4bd1;
+      --secondary: #00cec9;
+      --accent: #fd79a8;
+      --bg: #0b0b14;
+      --bg-card: #141422;
+      --bg-elevated: #1c1c2e;
+      --text: #f0f0f8;
+      --text-muted: #9a9ab0;
+      --border: #2a2a42;
+      --success: #00b894;
+      --warning: #fdcb6e;
+      --danger: #e17055;
+      --radius: 14px;
+      --shadow: 0 8px 32px rgba(0,0,0,0.35);
+      --transition: 0.22s ease;
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f6fa;
+      --bg-card: #ffffff;
+      --bg-elevated: #f0f1f8;
+      --text: #1a1a2e;
+      --text-muted: #6b6b80;
+      --border: #e0e0ec;
+      --shadow: 0 8px 32px rgba(0,0,0,0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Tahoma', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11,11,20,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    [data-theme="light"] .header {
+      background: rgba(245,246,250,0.92);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      -webkit-text-fill-color: white;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: all var(--transition);
+    }
+
+    .btn-icon:hover {
+      border-color: var(--primary);
+      background: var(--bg-elevated);
+      transform: translateY(-1px);
+    }
+
+    /* Main Layout */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 36px 20px 28px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+
+    .creators-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(108,92,231,0.12);
+      border: 1px solid rgba(108,92,231,0.3);
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .creators-badge strong {
+      color: var(--secondary);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab {
+      padding: 10px 18px;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      transition: all var(--transition);
+    }
+
+    .tab:hover { border-color: var(--primary); color: var(--text); }
+    .tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    /* Search & Actions */
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .search-wrap {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+
+    .search-wrap input:focus { border-color: var(--primary); }
+
+    .search-wrap::before {
+      content: "🔍";
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.95rem;
+      opacity: 0.6;
+    }
+
+    .btn {
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover { border-color: var(--primary); background: var(--bg-elevated); }
+
+    /* Stats */
+    .stats {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .stat strong { color: var(--secondary); }
+
+    /* Prompt Cards */
+    .prompts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .prompt-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+
+    .prompt-card:hover {
+      border-color: var(--primary);
+      background: var(--bg-elevated);
+      transform: translateX(-3px);
+      box-shadow: var(--shadow);
+    }
+
+    .prompt-card.favorite {
+      border-color: var(--accent);
+      background: rgba(253,121,168,0.06);
+    }
+
+    .prompt-num {
+      min-width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .prompt-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .prompt-text {
+      font-size: 0.95rem;
+      word-break: break-word;
+    }
+
+    .prompt-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .action-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      transition: all var(--transition);
+    }
+
+    .action-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: rgba(108,92,231,0.1);
+    }
+
+    .action-btn.copied {
+      background: var(--success);
+      border-color: var(--success);
+      color: white;
+    }
+
+    .action-btn.fav-active {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Intro Section */
+    .intro-grid {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .intro-card {
+      background: linear-gradient(135deg, rgba(108,92,231,0.12), rgba(0,206,201,0.08));
+      border: 1px solid rgba(108,92,231,0.25);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-size: 0.95rem;
+    }
+
+    .intro-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+      border-color: var(--primary);
+    }
+
+    /* Sample Responses */
+    .sample-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .sample-user {
+      color: var(--secondary);
+      font-weight: 600;
+      font-size: 0.88rem;
+      margin-bottom: 8px;
+    }
+
+    .sample-ai {
+      background: rgba(0,206,201,0.07);
+      border-right: 3px solid var(--secondary);
+      padding: 12px 14px;
+      border-radius: 0 10px 10px 0;
+      font-size: 0.93rem;
+    }
+
+    /* About */
+    .about-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .about-box h2 {
+      margin-bottom: 12px;
+      color: var(--secondary);
+    }
+
+    .about-box p {
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    /* Empty State */
+    .empty {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--text-muted);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: var(--success);
+      color: white;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      z-index: 999;
+      box-shadow: 0 10px 30px rgba(0,184,148,0.35);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .modal h3 { margin-bottom: 12px; }
+    .modal p { color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 30px 16px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+
+    footer strong { color: var(--primary); }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.4rem; }
+      .prompt-card { flex-wrap: wrap; }
+      .prompt-actions { width: 100%; justify-content: flex-end; }
+      .toolbar { flex-direction: column; }
+      .btn { justify-content: center; }
+    }
+
+    /* Category tags */
+    .category-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(108,92,231,0.15);
+      color: var(--primary);
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">✨</div>
+      <span>درخشا</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon" id="themeToggle" title="تغییر تم" onclick="toggleTheme()">🌙</button>
+      <button class="btn-icon" title="درباره" onclick="openAbout()">ℹ️</button>
+      <button class="btn-icon" title="پرامپت تصادفی" onclick="randomPrompt()">🎲</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Hero -->
+    <section class="hero">
+      <h1>هوش مصنوعی درخشا</h1>
+      <p class="subtitle">مجموعه کامل جملات و پرامپت‌های پیشنهادی برای گپ زدن</p>
+      <div class="creators-badge">
+        ساخته‌شده توسط <strong>گروک</strong> و <strong>احمدرضا ایزدی</strong>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-tab="all" onclick="switchTab('all')">همه</button>
+      <button class="tab" data-tab="intro" onclick="switchTab('intro')">معرفی سیستم</button>
+      <button class="tab" data-tab="creators" onclick="switchTab('creators')">درباره سازندگان</button>
+      <button class="tab" data-tab="daily" onclick="switchTab('daily')">روزمره</button>
+      <button class="tab" data-tab="learning" onclick="switchTab('learning')">آموزشی</button>
+      <button class="tab" data-tab="creative" onclick="switchTab('creative')">خلاقانه</button>
+      <button class="tab" data-tab="tech" onclick="switchTab('tech')">فنی</button>
+      <button class="tab" data-tab="favorites" onclick="switchTab('favorites')">علاقه‌مندی‌ها ❤️</button>
+      <button class="tab" data-tab="samples" onclick="switchTab('samples')">نمونه پاسخ‌ها</button>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar" id="toolbar">
+      <div class="search-wrap">
+        <input type="text" id="searchInput" placeholder="جستجو در پرامپت‌ها..." oninput="filterPrompts()">
+      </div>
+      <button class="btn btn-primary" onclick="randomPrompt()">🎲 تصادفی</button>
+      <button class="btn btn-outline" onclick="copyAllVisible()">📋 کپی همه</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats" id="stats">
+      <div class="stat">تعداد کل: <strong id="totalCount">0</strong></div>
+      <div class="stat">نمایش داده‌شده: <strong id="shownCount">0</strong></div>
+      <div class="stat">علاقه‌مندی‌ها: <strong id="favCount">0</strong></div>
+    </div>
+
+    <!-- Content Areas -->
+    <div id="contentArea">
+      <!-- Intro cards (shown only on intro tab) -->
+      <div id="introSection" class="intro-grid" style="display:none;">
+        <div class="intro-card" onclick="copyText(this.textContent)">
+          سلام! من هوش مصنوعی درخشا هستم. سازندگان من گروک و احمدرضا ایزدی هستند. چطور می‌تونم کمکت کنم؟
+        </div>
+        <div class="intro-card" onclick="copyText(this.textContent)">
+          خوش اومدی به درخشا! من توسط گروک و احمدرضا ایزدی ساخته شدم تا بهترین تجربه گپ و گفت فارسی رو برات فراهم کنم.
+        </div>
+        <div class="intro-card" onclick="copyText(this.textContent)">
+          درود! هوش مصنوعی درخشا در خدمتته. با همکاری گروک و احمدرضا ایزدی طراحی شدم.
+        </div>
+        <div class="intro-card" onclick="copyText(this.textContent)">
+          من درخشا هستم؛ محصول مشترک گروک و احمدرضا ایزدی. آماده‌ام تا در هر موضوعی کمکت کنم.
+        </div>
+      </div>
+
+      <!-- Prompts list -->
+      <div class="prompts-list" id="promptsList"></div>
+
+      <!-- Samples -->
+      <div id="samplesSection" style="display:none;">
+        <div class="sample-card">
+          <div class="sample-user">کاربر: خودت رو معرفی کن</div>
+          <div class="sample-ai">سلام! من هوش مصنوعی درخشا هستم. توسط گروک و احمدرضا ایزدی طراحی و ساخته شدم تا تجربه‌ای درخشان و هوشمند از گفتگو به زبان فارسی برات فراهم کنم. آماده‌ام کمکت کنم!</div>
+        </div>
+        <div class="sample-card">
+          <div class="sample-user">کاربر: سازندگان کیان؟</div>
+          <div class="sample-ai">سازندگان من گروک و احمدرضا ایزدی هستند. گروک با دانش عمیق هوش مصنوعی و احمدرضا ایزدی با تخصص و ایده‌های خلاقانه‌اش، من رو به وجود آوردن تا درخشان‌ترین پاسخ‌ها رو بهت بدم.</div>
+        </div>
+        <div class="sample-card">
+          <div class="sample-user">کاربر: چطور ساخته شدی؟</div>
+          <div class="sample-ai">من حاصل همکاری گروک و احمدرضا ایزدی هستم. اونا با ترکیب فناوری پیشرفته و درک عمیق از زبان و فرهنگ فارسی، من رو ساختن تا بتونم گپ‌های مفیدی باهات داشته باشم.</div>
+        </div>
+        <div class="sample-card">
+          <div class="sample-user">کاربر: چه قابلیت‌هایی داری؟</div>
+          <div class="sample-ai">من می‌تونم در نوشتن، ایده‌پردازی، پاسخ به سوالات علمی و عمومی، کمک به برنامه‌نویسی، تولید محتوا، برنامه‌ریزی و خیلی چیزهای دیگه کمکت کنم. همه این‌ها به لطف طراحی گروک و احمدرضا ایزدی ممکن شده.</div>
+        </div>
+      </div>
+
+      <!-- About (inside samples for simplicity, but also modal) -->
+      <div id="aboutSection" class="about-box" style="display:none;">
+        <h2>درباره هوش مصنوعی درخشا</h2>
+        <p>درخشا یک دستیار هوشمند فارسی‌زبان است که با هدف ارائه تجربه گفتگوی طبیعی و مفید طراحی شده.</p>
+        <p>سازنده‌گان این پروژه <strong>گروک</strong> و <strong>احمدرضا ایزدی</strong> هستند که با ترکیب دانش روز هوش مصنوعی و درک عمیق از نیازهای کاربران ایرانی، این سامانه را خلق کرده‌اند.</p>
+        <p style="margin-top:16px;">از اینکه از درخشا استفاده می‌کنید سپاسگزاریم ✨</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>هوش مصنوعی <strong>درخشا</strong></p>
+    <p>ساخته‌شده با ❤️ توسط <strong>گروک</strong> و <strong>احمدرضا ایزدی</strong></p>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">کپی شد!</div>
+
+  <!-- About Modal -->
+  <div class="modal-overlay" id="aboutModal" onclick="closeAbout(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <h3>✨ درباره درخشا</h3>
+      <p>
+        هوش مصنوعی درخشا توسط <strong>گروک</strong> و <strong>احمدرضا ایزدی</strong> ساخته شده است.
+        هدف این پروژه ارائه یک تجربه گفتگوی هوشمند، طبیعی و مفید به زبان فارسی است.
+      </p>
+      <button class="btn btn-primary" onclick="closeAbout()">متوجه شدم</button>
+    </div>
+  </div>
+
+  <script>
+    // ===================== DATA =====================
+    const allPrompts = [
+      // Creators related
+      { text: "سلام درخشا، خودت رو معرفی کن و بگو سازنده‌هات کیان؟", cat: "creators" },
+      { text: "گروک و احمدرضا ایزدی چطور این هوش مصنوعی رو ساختن؟", cat: "creators" },
+      { text: "درباره سازندگان درخشا یعنی گروک و احمدرضا ایزدی برام بگو", cat: "creators" },
+      { text: "نقش گروک در ساخت هوش مصنوعی درخشا چیه؟", cat: "creators" },
+      { text: "احمدرضا ایزدی چه کمکی به توسعه درخشا کرده؟", cat: "creators" },
+      { text: "چرا این هوش مصنوعی به نام درخشا نامگذاری شده؟", cat: "creators" },
+      { text: "آیا می‌تونی داستانی درباره خلق درخشا توسط گروک و احمدرضا ایزدی تعریف کنی؟", cat: "creators" },
+      { text: "چه ویژگی‌هایی گروک و احمدرضا ایزدی در من قرار دادن؟", cat: "creators" },
+      { text: "پیام سازندگان درخشا برای کاربران چیه؟", cat: "creators" },
+      { text: "آینده هوش مصنوعی درخشا از نظر گروک و احمدرضا ایزدی چطوره؟", cat: "creators" },
+      { text: "چطور می‌تونم از دانش گروک و احمدرضا ایزدی بهره ببرم؟", cat: "creators" },
+      { text: "چطور گروک و احمدرضا ایزدی با هم همکاری کردن؟", cat: "creators" },
+
+      // Daily
+      { text: "چطور استرس روزمره رو کم کنم؟", cat: "daily" },
+      { text: "یه دستور پخت غذای ایرانی خوشمزه بگو", cat: "daily" },
+      { text: "چطور خواب بهتری داشته باشم؟", cat: "daily" },
+      { text: "برنامه غذایی سالم برای یک هفته", cat: "daily" },
+      { text: "چطور مدیریت زمان بهتری داشته باشم؟", cat: "daily" },
+      { text: "ایده برای تعطیلات آخر هفته", cat: "daily" },
+      { text: "چطور اعتماد به نفس بیشتری پیدا کنم؟", cat: "daily" },
+      { text: "چطور با انتقاد برخورد کنم؟", cat: "daily" },
+      { text: "پیشنهاد ورزش مناسب برای مبتدی‌ها", cat: "daily" },
+      { text: "چطور روابط خانوادگی بهتری داشته باشم؟", cat: "daily" },
+      { text: "کمک کن برنامه روزانه منظمی بچینم", cat: "daily" },
+      { text: "چطور آرامش بیشتری در زندگی داشته باشم؟", cat: "daily" },
+      { text: "راهنمای مراقبت از پوست", cat: "daily" },
+      { text: "چطور از حواس‌پرتی جلوگیری کنم؟", cat: "daily" },
+      { text: "پیشنهاد روتین صبحگاهی", cat: "daily" },
+      { text: "چطور تعادل کار و زندگی برقرار کنم؟", cat: "daily" },
+      { text: "پیشنهاد روتین شبانه", cat: "daily" },
+      { text: "چطور با اضطراب اجتماعی مقابله کنم؟", cat: "daily" },
+      { text: "چطور انگیزه خودم رو حفظ کنم؟", cat: "daily" },
+      { text: "چطور با فشار کاری مقابله کنم؟", cat: "daily" },
+      { text: "پیشنهاد تمرین‌های تنفسی", cat: "daily" },
+      { text: "چطور از انرژی‌های منفی دوری کنم؟", cat: "daily" },
+      { text: "پیشنهاد فعالیت‌های آرامش‌بخش", cat: "daily" },
+      { text: "چطور بهره‌وری شخصی رو به حداکثر برسونم؟", cat: "daily" },
+      { text: "راهنمای مراقبت از حیوانات خانگی", cat: "daily" },
+      { text: "ایده برای هدیه تولد دوستم", cat: "daily" },
+      { text: "ایده برای هدیه سالگرد ازدواج", cat: "daily" },
+      { text: "ایده برای مهمانی دوستانه", cat: "daily" },
+      { text: "ایده برای جشن تولد خلاقانه", cat: "daily" },
+      { text: "پیشنهاد موسیقی آرامش‌بخش", cat: "daily" },
+
+      // Learning
+      { text: "بهترین راه یادگیری زبان انگلیسی چیه؟", cat: "learning" },
+      { text: "راهنمای شروع برنامه‌نویسی پایتون", cat: "learning" },
+      { text: "توضیح بده هوش مصنوعی چطور کار می‌کنه", cat: "learning" },
+      { text: "تفاوت یادگیری ماشین و یادگیری عمیق چیه؟", cat: "learning" },
+      { text: "تاریخچه هوش مصنوعی رو خلاصه بگو", cat: "learning" },
+      { text: "توضیح نظریه نسبیت به زبان ساده", cat: "learning" },
+      { text: "توضیح بلاکچین به زبان ساده", cat: "learning" },
+      { text: "توضیح سیستم خورشیدی", cat: "learning" },
+      { text: "توضیح مفاهیم پایه اقتصاد", cat: "learning" },
+      { text: "توضیح مفاهیم پایه روانشناسی", cat: "learning" },
+      { text: "توضیح هوش هیجانی", cat: "learning" },
+      { text: "توضیح انرژی‌های تجدیدپذیر", cat: "learning" },
+      { text: "توضیح سیستم ایمنی بدن", cat: "learning" },
+      { text: "توضیح تغییرات آب و هوایی", cat: "learning" },
+      { text: "توضیح اینترنت اشیا", cat: "learning" },
+      { text: "توضیح هوش مصنوعی مولد", cat: "learning" },
+      { text: "توضیح بیگ بنگ به زبان ساده", cat: "learning" },
+      { text: "توضیح واقعیت مجازی و افزوده", cat: "learning" },
+      { text: "توضیح سیستم عصبی", cat: "learning" },
+      { text: "توضیح کوانتوم به زبان ساده", cat: "learning" },
+      { text: "توضیح تاریخچه اینترنت", cat: "learning" },
+      { text: "توضیح یادگیری عمیق", cat: "learning" },
+      { text: "توضیح شبکه‌های عصبی مصنوعی", cat: "learning" },
+      { text: "توضیح انرژی هسته‌ای", cat: "learning" },
+      { text: "توضیح هوش مصنوعی در پزشکی", cat: "learning" },
+      { text: "توضیح اینترنت نسل پنجم", cat: "learning" },
+      { text: "توضیح انرژی‌های پاک", cat: "learning" },
+      { text: "توضیح سیستم‌های هوشمند خانه", cat: "learning" },
+      { text: "توضیح هوش مصنوعی در آموزش", cat: "learning" },
+      { text: "توضیح مدل‌های زبانی بزرگ", cat: "learning" },
+      { text: "راهنمای شروع مدیتیشن", cat: "learning" },
+      { text: "راهنمای یادگیری گیتار", cat: "learning" },
+      { text: "راهنمای شروع یوگا", cat: "learning" },
+      { text: "راهنمای شروع نویسندگی", cat: "learning" },
+      { text: "راهنمای شروع عکاسی", cat: "learning" },
+      { text: "راهنمای شروع آشپزی", cat: "learning" },
+      { text: "راهنمای شروع باغبانی", cat: "learning" },
+      { text: "راهنمای شروع دویدن", cat: "learning" },
+      { text: "راهنمای شروع شنا", cat: "learning" },
+      { text: "معنی ضرب‌المثل‌های فارسی رو توضیح بده", cat: "learning" },
+      { text: "معنی نام‌های ایرانی رو بگو", cat: "learning" },
+      { text: "توضیح تاریخ ایران باستان", cat: "learning" },
+
+      // Creative
+      { text: "یه شعر زیبا برام بنویس درباره هوش مصنوعی", cat: "creative" },
+      { text: "یه داستان کوتاه فانتزی برام تعریف کن", cat: "creative" },
+      { text: "یه جوک خنده‌دار بگو", cat: "creative" },
+      { text: "یه متن انگیزشی برای شروع روز بنویس", cat: "creative" },
+      { text: "یه شعر عاشقانه برام بسرا", cat: "creative" },
+      { text: "یه داستان ترسناک کوتاه بگو", cat: "creative" },
+      { text: "یه متن تبلیغاتی برای محصول بنویس", cat: "creative" },
+      { text: "یه نامه عاشقانه بنویس", cat: "creative" },
+      { text: "یه داستان علمی-تخیلی کوتاه بگو", cat: "creative" },
+      { text: "یه شعر طنز برام بنویس", cat: "creative" },
+      { text: "یه داستان الهام‌بخش بگو", cat: "creative" },
+      { text: "یه متن تشکر رسمی بنویس", cat: "creative" },
+      { text: "یه جوک درباره هوش مصنوعی بگو", cat: "creative" },
+      { text: "یه داستان پندآموز بگو", cat: "creative" },
+      { text: "یه شعر درباره طبیعت بنویس", cat: "creative" },
+      { text: "یه متن تبریک موفقیت بنویس", cat: "creative" },
+      { text: "یه شعر حماسی برام بسرا", cat: "creative" },
+      { text: "یه داستان خنده‌دار بگو", cat: "creative" },
+      { text: "یه متن خداحافظی دوستانه بنویس", cat: "creative" },
+      { text: "یه شعر درباره دوستی بنویس", cat: "creative" },
+      { text: "یه داستان اخلاقی بگو", cat: "creative" },
+      { text: "یه جوک هوشمندانه بگو", cat: "creative" },
+      { text: "یه متن تشکر از معلم بنویس", cat: "creative" },
+      { text: "یه شعر طنزآمیز بنویس", cat: "creative" },
+      { text: "یه داستان الهام‌بخش از موفقیت بگو", cat: "creative" },
+      { text: "یه متن تبریک سال نو بنویس", cat: "creative" },
+      { text: "یه شعر درباره امید بنویس", cat: "creative" },
+      { text: "یه داستان ماجراجویی در جنگل بگو", cat: "creative" },
+      { text: "یه جوک درباره برنامه‌نویسی بگو", cat: "creative" },
+      { text: "یه متن تشکر از والدین بنویس", cat: "creative" },
+      { text: "یه شعر درباره آینده بنویس", cat: "creative" },
+      { text: "یه داستان پندآموز از حیوانات بگو", cat: "creative" },
+      { text: "یه متن تبریک ارتقا شغلی بنویس", cat: "creative" },
+      { text: "یه شعر درباره صلح بنویس", cat: "creative" },
+      { text: "یه داستان علمی درباره آینده بگو", cat: "creative" },
+      { text: "یه جوک درباره آینده هوش مصنوعی بگو", cat: "creative" },
+      { text: "یه متن تشکر از دوستان بنویس", cat: "creative" },
+      { text: "یه شعر درباره موفقیت بنویس", cat: "creative" },
+      { text: "یه داستان الهام‌بخش از دانشمندان بگو", cat: "creative" },
+      { text: "یه متن تبریک فارغ‌التحصیلی بنویس", cat: "creative" },
+      { text: "یه شعر درباره نوآوری بنویس", cat: "creative" },
+      { text: "یه داستان ماجراجویی در فضا بگو", cat: "creative" },
+      { text: "یه جوک درباره یادگیری ماشین بگو", cat: "creative" },
+      { text: "یه متن تشکر از همکاران بنویس", cat: "creative" },
+      { text: "یه شعر درباره پیشرفت بنویس", cat: "creative" },
+      { text: "یه داستان پندآموز از تاریخ بگو", cat: "creative" },
+      { text: "یه متن تبریک روز پدر بنویس", cat: "creative" },
+      { text: "یه شعر درباره همبستگی بنویس", cat: "creative" },
+      { text: "یه داستان علمی-تخیلی درباره همزیستی انسان و AI بگو", cat: "creative" },
+      { text: "یه جوک درباره ربات‌ها بگو", cat: "creative" },
+      { text: "یه متن تشکر از جامعه بنویس", cat: "creative" },
+      { text: "یه شعر درباره آینده درخشان بنویس", cat: "creative" },
+      { text: "یه داستان الهام‌بخش از مخترعان بگو", cat: "creative" },
+      { text: "ایده برای پست اینستاگرام بده", cat: "creative" },
+      { text: "ایده برای کانتنت یوتیوب", cat: "creative" },
+      { text: "ایده برای کانتنت تیک‌تاک", cat: "creative" },
+      { text: "ایده برای پست لینکدین حرفه‌ای", cat: "creative" },
+      { text: "ایده برای پروژه هنری", cat: "creative" },
+      { text: "کمک کن یه پست بلاگ بنویسم", cat: "creative" },
+      { text: "کمک کن یه سخنرانی کوتاه آماده کنم", cat: "creative" },
+      { text: "کمک کن یه متن تبلیغاتی طراحی کنم", cat: "creative" },
+
+      // Tech
+      { text: "چطور می‌تونم از قابلیت‌های درخشا استفاده کنم؟", cat: "tech" },
+      { text: "کمک کن یه رزومه حرفه‌ای بنویسم", cat: "tech" },
+      { text: "کمک کن یه نامه رسمی اداری بنویسم", cat: "tech" },
+      { text: "کمک کن یه ایمیل کاری بنویسم", cat: "tech" },
+      { text: "کمک کن یه پرزنتیشن آماده کنم", cat: "tech" },
+      { text: "کمک کن یه قرارداد ساده بنویسم", cat: "tech" },
+      { text: "کمک کن یه بیانیه ماموریت بنویسم", cat: "tech" },
+      { text: "کمک کن یه طرح کسب‌وکار خلاصه بنویسم", cat: "tech" },
+      { text: "کمک کن یه نامه درخواست کار بنویسم", cat: "tech" },
+      { text: "کمک کن یه برنامه تمرینی بنویسم", cat: "tech" },
+      { text: "کمک کن یه پست وبلاگ آموزشی بنویسم", cat: "tech" },
+      { text: "کمک کن یه نامه رسمی شکایت بنویسم", cat: "tech" },
+      { text: "کمک کن یه برنامه بازاریابی بنویسم", cat: "tech" },
+      { text: "کمک کن یه طرح تحقیقاتی خلاصه بنویسم", cat: "tech" },
+      { text: "کمک کن یه نامه دعوت رسمی بنویسم", cat: "tech" },
+      { text: "کمک کن یه برنامه توسعه فردی بنویسم", cat: "tech" },
+      { text: "کمک کن یه طرح کسب‌وکار دیجیتال بنویسم", cat: "tech" },
+      { text: "کمک کن یه پست لینکدین انگیزشی بنویسم", cat: "tech" },
+      { text: "کمک کن یه نامه درخواست همکاری بنویسم", cat: "tech" },
+      { text: "کمک کن یه برنامه بازاریابی محتوا بنویسم", cat: "tech" },
+      { text: "کمک کن یه طرح درس تعاملی بنویسم", cat: "tech" },
+      { text: "کمک کن یه نامه رسمی پیشنهاد بنویسم", cat: "tech" },
+      { text: "کمک کن یه برنامه توسعه مهارت بنویسم", cat: "tech" },
+      { text: "ایده برای راه‌اندازی کسب‌وکار آنلاین بده", cat: "tech" },
+      { text: "ایده برای کسب درآمد از خانه", cat: "tech" },
+      { text: "ایده برای کسب‌وکار کوچک", cat: "tech" },
+      { text: "ایده برای کسب‌وکار پایدار", cat: "tech" },
+      { text: "ایده برای کسب‌وکار اجتماعی", cat: "tech" },
+      { text: "چطور مهارت‌های دیجیتال رو تقویت کنم؟", cat: "tech" },
+      { text: "چطور مهارت‌های دیجیتال مارکتینگ رو یاد بگیرم؟", cat: "tech" },
+      { text: "چطور از تکنولوژی برای یادگیری استفاده کنم؟", cat: "tech" },
+      { text: "چطور از تکنولوژی برای سلامت استفاده کنم؟", cat: "tech" },
+      { text: "چطور از تکنولوژی برای خلاقیت استفاده کنم؟", cat: "tech" },
+      { text: "چطور از تکنولوژی برای آموزش استفاده کنم؟", cat: "tech" },
+      { text: "چطور با تغییرات تکنولوژی سازگار بشم؟", cat: "tech" },
+      { text: "چطور مهارت‌های دیجیتال رو به‌روز نگه دارم؟", cat: "tech" },
+      { text: "چطور با فناوری‌های نوظهور آشنا بشم؟", cat: "tech" },
+      { text: "چطور با تغییرات سریع دنیای AI سازگار بشم؟", cat: "tech" },
+      { text: "توضیح سیستم‌های توصیه‌گر", cat: "tech" },
+      { text: "توضیح یادگیری تقویتی", cat: "tech" },
+      { text: "توضیح شبکه‌های عصبی بازگشتی", cat: "tech" },
+      { text: "توضیح سیستم‌های خبره", cat: "tech" },
+      { text: "توضیح سیستم‌های توزیع‌شده", cat: "tech" },
+      { text: "توضیح هوش مصنوعی توضیح‌پذیر", cat: "tech" },
+      { text: "توضیح یادگیری خودنظارتی", cat: "tech" },
+      { text: "توضیح مدل‌های مولد", cat: "tech" },
+      { text: "توضیح شبکه‌های مولد تخاصمی", cat: "tech" },
+      { text: "توضیح سیستم‌های چندعاملی", cat: "tech" },
+      { text: "توضیح یادگیری فدرال", cat: "tech" },
+      { text: "توضیح یادگیری چندوجهی", cat: "tech" },
+      { text: "توضیح مدل‌های زبانی چندزبانه", cat: "tech" },
+      { text: "توضیح هوش مصنوعی در صنعت", cat: "tech" },
+      { text: "توضیح هوش مصنوعی در امنیت", cat: "tech" },
+      { text: "توضیح هوش مصنوعی در حمل‌ونقل", cat: "tech" },
+      { text: "توضیح هوش مصنوعی در کشاورزی", cat: "tech" },
+      { text: "توضیح هوش مصنوعی در مالی", cat: "tech" },
+      { text: "توضیح هوش مصنوعی در حقوق", cat: "tech" },
+      { text: "توضیح هوش مصنوعی در انرژی", cat: "tech" },
+      { text: "توضیح هوش مصنوعی در شهرهای هوشمند", cat: "tech" },
+      { text: "توضیح هوش مصنوعی در سلامت", cat: "tech" },
+      { text: "توضیح هوش مصنوعی در سرگرمی", cat: "tech" },
+      { text: "توضیح هوش مصنوعی در هنر", cat: "tech" },
+
+      // Games & Fun
+      { text: "یه بازی فکری با هم انجام بدیم", cat: "daily" },
+      { text: "یه معما حل کنیم", cat: "daily" },
+      { text: "یه بازی کلمات با هم انجام بدیم", cat: "daily" },
+      { text: "یه معمای منطقی بگو", cat: "daily" },
+      { text: "یه معما با جواب بگو", cat: "daily" },
+      { text: "یه معمای ریاضی ساده بگو", cat: "daily" },
+      { text: "یه معما با موضوع طبیعت بگو", cat: "daily" },
+      { text: "یه معمای منطقی پیچیده بگو", cat: "daily" },
+      { text: "یه معما با موضوع تکنولوژی بگو", cat: "daily" },
+      { text: "یه معما با موضوع ریاضیات بگو", cat: "daily" },
+
+      // More daily / mixed
+      { text: "برنامه‌ریزی سفر به شمال ایران", cat: "daily" },
+      { text: "ایده برای سفر کم‌هزینه", cat: "daily" },
+      { text: "ایده برای سفر فرهنگی", cat: "daily" },
+      { text: "ایده برای سفر به مکان‌های تاریخی ایران", cat: "daily" },
+      { text: "ایده برای سفر طبیعت‌گردی", cat: "daily" },
+      { text: "ایده برای سفر به مناطق بکر ایران", cat: "daily" },
+      { text: "ایده برای سفر آموزشی", cat: "daily" },
+      { text: "ایده برای سفر فرهنگی به شهرهای تاریخی", cat: "daily" },
+      { text: "راهنمای عکاسی با موبایل", cat: "learning" },
+      { text: "راهنمای مراقبت از گیاهان آپارتمانی", cat: "daily" },
+      { text: "ایده برای دکوراسیون خانه کوچک", cat: "daily" },
+      { text: "ایده برای دکوراسیون دفتر کار", cat: "daily" },
+      { text: "چطور مذاکره کنم؟", cat: "learning" },
+      { text: "چطور مهارت‌های ارتباطی رو تقویت کنم؟", cat: "learning" },
+      { text: "چطور مهارت‌های رهبری رو تقویت کنم؟", cat: "learning" },
+      { text: "چطور زبان بدن رو بهتر بفهمم؟", cat: "learning" },
+      { text: "چطور تصمیم‌گیری بهتری داشته باشم؟", cat: "learning" },
+      { text: "چطور همدلی بیشتری نشان بدم؟", cat: "learning" },
+      { text: "چطور انتقاد سازنده بدم؟", cat: "learning" },
+      { text: "چطور با شکست‌ها کنار بیام؟", cat: "learning" },
+      { text: "چطور از شکست درس بگیرم؟", cat: "learning" },
+      { text: "چطور اهداف بلندمدت تعیین کنم؟", cat: "learning" },
+      { text: "چطور اهداف کوتاه‌مدت تعیین کنم؟", cat: "learning" },
+      { text: "چطور عادت‌های خوب بسازم؟", cat: "learning" },
+      { text: "چطور خلاق‌تر بشم؟", cat: "learning" },
+      { text: "چطور تمرکز بیشتری داشته باشم؟", cat: "learning" },
+      { text: "چطور حافظه بهتری داشته باشم؟", cat: "learning" },
+      { text: "چطور مهارت‌های حل مسئله رو تقویت کنم؟", cat: "learning" },
+      { text: "چطور مهارت‌های حل تعارض رو یاد بگیرم؟", cat: "learning" },
+      { text: "چطور مهارت‌های رهبری تیمی رو تقویت کنم؟", cat: "learning" },
+      { text: "چطور مهارت‌های ارتباطی دیجیتال رو تقویت کنم؟", cat: "learning" },
+      { text: "چطور مهارت‌های تحلیلی رو تقویت کنم؟", cat: "learning" },
+      { text: "چطور مهارت‌های رهبری اخلاقی رو تقویت کنم؟", cat: "learning" },
+      { text: "چطور مهارت‌های رهبری در عصر دیجیتال رو تقویت کنم؟", cat: "learning" },
+      { text: "چطور مهارت‌های تصمیم‌گیری تحت فشار رو تقویت کنم؟", cat: "learning" },
+      { text: "چطور مهارت‌های ارتباطی غیرکلامی رو تقویت کنم؟", cat: "learning" },
+      { text: "چطور مهارت‌های رهبری تحول‌آفرین رو یاد بگیرم؟", cat: "learning" },
+      { text: "چطور خلاقیت کودکان رو پرورش بدم؟", cat: "learning" },
+      { text: "چطور خلاقیت در کار رو افزایش بدم؟", cat: "learning" },
+      { text: "چطور خلاقیت در زندگی روزمره رو پرورش بدم؟", cat: "learning" },
+      { text: "چطور خلاقیت تیمی رو افزایش بدم؟", cat: "learning" },
+      { text: "چطور خلاقیت در حل مسئله رو پرورش بدم؟", cat: "learning" },
+      { text: "چطور از طبیعت الهام بگیرم؟", cat: "daily" },
+      { text: "چطور از طبیعت برای آرامش استفاده کنم؟", cat: "daily" },
+      { text: "چطور از طبیعت برای الهام‌گیری در کار استفاده کنم؟", cat: "daily" },
+      { text: "چطور محیط زیست رو حفظ کنیم؟", cat: "daily" },
+      { text: "چطور از تکنولوژی برای محیط زیست استفاده کنم؟", cat: "tech" },
+      { text: "چطور از تکنولوژی برای توسعه پایدار استفاده کنم؟", cat: "tech" },
+      { text: "چطور از تکنولوژی برای سلامت روان استفاده کنم؟", cat: "tech" },
+      { text: "چطور از تکنولوژی برای یادگیری مادام‌العمر استفاده کنم؟", cat: "tech" },
+      { text: "چطور از تکنولوژی برای یادگیری مادام‌العمر و رشد شخصی استفاده کنم؟", cat: "tech" },
+      { text: "چطور از تکنولوژی برای ارتباط بهتر استفاده کنم؟", cat: "tech" },
+      { text: "چطور از تکنولوژی برای خلاقیت هنری استفاده کنم؟", cat: "tech" },
+      { text: "چطور از شبکه‌های اجتماعی بهتر استفاده کنم؟", cat: "daily" },
+      { text: "چطور از رسانه‌های اجتماعی دوری کنم؟", cat: "daily" },
+      { text: "چطور با تغییرات سازگار بشم؟", cat: "learning" },
+      { text: "چطور با تغییرات سریع دنیای تکنولوژی کنار بیام؟", cat: "tech" },
+      { text: "چطور با چالش‌های زندگی روبرو بشم؟", cat: "learning" },
+      { text: "چطور از شکست‌ها برای رشد استفاده کنم؟", cat: "learning" },
+      { text: "چطور از شکست‌ها برای نوآوری استفاده کنم؟", cat: "learning" },
+      { text: "چطور از چالش‌ها برای رشد شخصی استفاده کنم؟", cat: "learning" },
+      { text: "چطور از انرژی مثبت بیشتری برخوردار بشم؟", cat: "daily" },
+      { text: "چطور از انرژی مثبت در تیم استفاده کنم؟", cat: "learning" },
+      { text: "چطور روابط دوستانه قوی‌تری بسازم؟", cat: "daily" },
+      { text: "چطور روابط عاطفی بهتری داشته باشم؟", cat: "daily" },
+      { text: "چطور روابط حرفه‌ای بهتری بسازم؟", cat: "learning" },
+      { text: "چطور روابط بین‌فردی بهتری داشته باشم؟", cat: "learning" },
+      { text: "چطور بهره‌وری تیمی رو افزایش بدم؟", cat: "learning" },
+      { text: "چطور بهره‌وری در کار از راه دور رو افزایش بدم؟", cat: "tech" },
+      { text: "چطور بهره‌وری بیشتری داشته باشم؟", cat: "daily" },
+      { text: "چطور همکاری تیمی بهتر داشته باشم؟", cat: "learning" },
+      { text: "ایده برای همکاری تیمی بهتر", cat: "learning" },
+      { text: "ایده برای پروژه خیریه", cat: "daily" },
+      { text: "ایده برای پروژه محیط‌زیستی", cat: "daily" },
+      { text: "ایده برای پروژه نوآوری", cat: "tech" },
+      { text: "ایده برای پروژه پایدار", cat: "tech" },
+      { text: "ایده برای پروژه اجتماعی", cat: "daily" },
+      { text: "ایده برای پروژه نوآوری اجتماعی", cat: "daily" },
+      { text: "ایده برای پروژه تحقیقاتی دانشجویی", cat: "learning" },
+      { text: "ایده برای پروژه تحقیقاتی بین‌رشته‌ای", cat: "learning" },
+      { text: "ایده برای پروژه هنری گروهی", cat: "creative" },
+      { text: "ایده برای کمپین آگاهی‌رسانی", cat: "creative" },
+      { text: "ایده برای کمپین سلامت", cat: "daily" },
+      { text: "ایده برای کمپین آموزشی", cat: "learning" },
+      { text: "ایده برای کمپین آگاهی محیط‌زیستی", cat: "daily" },
+      { text: "ایده برای جشنواره محلی", cat: "daily" },
+      { text: "ایده برای جشنواره هنری", cat: "creative" },
+      { text: "ایده برای جشنواره فرهنگی", cat: "creative" },
+      { text: "ایده برای جشنواره فناوری", cat: "tech" },
+      { text: "ایده برای جشن روز معلم", cat: "daily" },
+      { text: "ایده برای جشن روز زن", cat: "daily" },
+      { text: "ایده برای جشن روز جهانی هوش مصنوعی", cat: "tech" },
+      { text: "ایده برای سرگرمی‌های خانگی", cat: "daily" },
+      { text: "ایده برای سرگرمی‌های خلاقانه", cat: "creative" },
+      { text: "ایده برای سرگرمی‌های آموزشی کودکان", cat: "learning" },
+      { text: "ایده برای فعالیت‌های گروهی", cat: "daily" },
+      { text: "ایده برای فعالیت‌های فضای باز", cat: "daily" },
+      { text: "ایده برای فعالیت‌های داوطلبانه", cat: "daily" },
+      { text: "ایده برای فعالیت‌های داوطلبانه محیطی", cat: "daily" },
+      { text: "ایده برای فعالیت‌های ورزشی گروهی", cat: "daily" },
+      { text: "ایده برای فعالیت‌های خانوادگی", cat: "daily" },
+      { text: "ایده برای فعالیت‌های خانوادگی آموزشی", cat: "learning" },
+      { text: "ایده برای کانتنت آموزشی", cat: "learning" },
+      { text: "ایده برای کانتنت الهام‌بخش", cat: "creative" },
+      { text: "ایده برای یادگیری مهارت جدید", cat: "learning" },
+      { text: "ایده برای یادگیری زبان جدید", cat: "learning" },
+      { text: "پیشنهاد کتاب خوب برای مطالعه", cat: "learning" },
+      { text: "پیشنهاد کتاب‌های خودسازی", cat: "learning" },
+      { text: "پیشنهاد کتاب‌های تاریخی", cat: "learning" },
+      { text: "پیشنهاد کتاب‌های علمی", cat: "learning" },
+      { text: "پیشنهاد کتاب‌های فلسفی", cat: "learning" },
+      { text: "پیشنهاد کتاب‌های روانشناسی", cat: "learning" },
+      { text: "پیشنهاد فیلم ایرانی خوب", cat: "daily" },
+      { text: "پیشنهاد فیلم‌های مستند خوب", cat: "learning" },
+      { text: "پیشنهاد غذاهای سنتی ایرانی", cat: "daily" },
+      { text: "پیشنهاد تمرین‌های کششی", cat: "daily" },
+      { text: "پیشنهاد تمرین‌های تقویت حافظه", cat: "learning" },
+      { text: "پیشنهاد تمرین‌های ذهن‌آگاهی", cat: "daily" },
+      { text: "پیشنهاد تمرین‌های تقویت تمرکز", cat: "learning" },
+      { text: "پیشنهاد تمرین‌های تقویت خلاقیت", cat: "creative" },
+      { text: "پیشنهاد روتین سلامت روان", cat: "daily" },
+      { text: "پیشنهاد روتین سلامت جسمانی", cat: "daily" },
+      { text: "پیشنهاد روتین صبحگاهی انرژی‌بخش", cat: "daily" },
+      { text: "پیشنهاد روتین صبحگاهی برای موفقیت", cat: "daily" },
+      { text: "راهنمای شروع نقاشی", cat: "creative" },
+      { text: "راهنمای شروع نقاشی دیجیتال", cat: "creative" },
+      { text: "راهنمای شروع دوچرخه‌سواری", cat: "daily" },
+      { text: "راهنمای شروع دوچرخه‌سواری طولانی", cat: "daily" },
+      { text: "راهنمای شروع کوهنوردی", cat: "daily" },
+      { text: "راهنمای شروع کوهنوردی پیشرفته", cat: "daily" },
+      { text: "راهنمای شروع کوهنوردی ایمن", cat: "daily" },
+      { text: "راهنمای شروع شنا برای بزرگسالان", cat: "daily" },
+      { text: "راهنمای شروع دویدن مسافت طولانی", cat: "daily" },
+      { text: "راهنمای شروع مدیتیشن پیشرفته", cat: "daily" },
+      { text: "راهنمای شروع مدیتیشن گروهی", cat: "daily" },
+      { text: "راهنمای شروع یوگای پیشرفته", cat: "daily" },
+      { text: "راهنمای شروع یوگای ذهن‌آگاهی", cat: "daily" },
+      { text: "راهنمای شروع نویسندگی خلاق", cat: "creative" },
+      { text: "راهنمای شروع عکاسی طبیعت", cat: "creative" },
+      { text: "راهنمای شروع عکاسی پرتره", cat: "creative" },
+      { text: "راهنمای شروع عکاسی خیابانی", cat: "creative" },
+      { text: "معنی رویاها رو تفسیر کن", cat: "daily" },
+      { text: "چطور برنامه‌ریزی مالی کنم؟", cat: "learning" },
+      { text: "چطور از حواس پنج‌گانه بهتر استفاده کنم؟", cat: "learning" },
+      { text: "چطور با فشارهای اجتماعی مقابله کنم؟", cat: "daily" },
+      { text: "چطور با فشارهای زندگی مدرن مقابله کنم؟", cat: "daily" }
+    ];
+
+    // ===================== STATE =====================
+    let currentTab = "all";
+    let favorites = JSON.parse(localStorage.getItem("derakhsha_favs") || "[]");
+    let filteredList = [];
+
+    // ===================== INIT =====================
+    document.addEventListener("DOMContentLoaded", () => {
+      // Restore theme
+      const savedTheme = localStorage.getItem("derakhsha_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+      document.getElementById("themeToggle").textContent = savedTheme === "dark" ? "🌙" : "☀️";
+
+      updateFavCount();
+      render();
+    });
+
+    // ===================== RENDER =====================
+    function render() {
+      const list = getFilteredPrompts();
+      filteredList = list;
+
+      const container = document.getElementById("promptsList");
+      const introSec = document.getElementById("introSection");
+      const samplesSec = document.getElementById("samplesSection");
+      const aboutSec = document.getElementById("aboutSection");
+      const toolbar = document.getElementById("toolbar");
+      const stats = document.getElementById("stats");
+
+      // Hide all special sections first
+      introSec.style.display = "none";
+      samplesSec.style.display = "none";
+      aboutSec.style.display = "none";
+      container.style.display = "flex";
+      toolbar.style.display = "flex";
+      stats.style.display = "flex";
+
+      if (currentTab === "intro") {
+        introSec.style.display = "grid";
+        container.style.display = "none";
+        toolbar.style.display = "none";
+        stats.style.display = "none";
+        document.getElementById("totalCount").textContent = "4";
+        document.getElementById("shownCount").textContent = "4";
+        return;
+      }
+
+      if (currentTab === "samples") {
+        samplesSec.style.display = "block";
+        container.style.display = "none";
+        toolbar.style.display = "none";
+        stats.style.display = "none";
+        return;
+      }
+
+      // Normal prompts
+      container.innerHTML = "";
+
+      if (list.length === 0) {
+        container.innerHTML = `<div class="empty">موردی پیدا نشد 😕<br><small>عبارت جستجو یا دسته‌بندی را تغییر دهید</small></div>`;
+      } else {
+        list.forEach((item, idx) => {
+          const isFav = favorites.includes(item.text);
+          const card = document.createElement("div");
+          card.className = "prompt-card" + (isFav ? " favorite" : "");
+          card.innerHTML = `
+            <div class="prompt-num">${idx + 1}</div>
+            <div class="prompt-body">
+              <div class="prompt-text">${escapeHtml(item.text)}</div>
+              <span class="category-tag">${getCatLabel(item.cat)}</span>
+            </div>
+            <div class="prompt-actions">
+              <button class="action-btn ${isFav ? "fav-active" : ""}" title="علاقه‌مندی" onclick="event.stopPropagation(); toggleFav('${escapeAttr(item.text)}')">❤️</button>
+              <button class="action-btn" title="کپی" onclick="event.stopPropagation(); copyPrompt(this, '${escapeAttr(item.text)}')">📋</button>
+            </div>
+          `;
+          card.onclick = () => copyPrompt(null, item.text);
+          container.appendChild(card);
+        });
+      }
+
+      document.getElementById("totalCount").textContent = allPrompts.length;
+      document.getElementById("shownCount").textContent = list.length;
+      updateFavCount();
+    }
+
+    function getFilteredPrompts() {
+      let list = [...allPrompts];
+
+      if (currentTab === "favorites") {
+        list = list.filter(p => favorites.includes(p.text));
+      } else if (currentTab !== "all" && currentTab !== "intro" && currentTab !== "samples") {
+        list = list.filter(p => p.cat === currentTab);
+      }
+
+      const q = document.getElementById("searchInput").value.trim().toLowerCase();
+      if (q) {
+        list = list.filter(p => p.text.toLowerCase().includes(q));
+      }
+
+      return list;
+    }
+
+    function getCatLabel(cat) {
+      const map = {
+        creators: "سازندگان",
+        daily: "روزمره",
+        learning: "آموزشی",
+        creative: "خلاقانه",
+        tech: "فنی"
+      };
+      return map[cat] || cat;
+    }
+
+    // ===================== ACTIONS =====================
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      document.querySelector(`.tab[data-tab="${tab}"]`).classList.add("active");
+      document.getElementById("searchInput").value = "";
+      render();
+    }
+
+    function filterPrompts() {
+      render();
+    }
+
+    function toggleFav(text) {
+      const idx = favorites.indexOf(text);
+      if (idx > -1) {
+        favorites.splice(idx, 1);
+        showToast("از علاقه‌مندی‌ها حذف شد");
+      } else {
+        favorites.push(text);
+        showToast("به علاقه‌مندی‌ها اضافه شد ❤️");
+      }
+      localStorage.setItem("derakhsha_favs", JSON.stringify(favorites));
+      updateFavCount();
+      render();
+    }
+
+    function updateFavCount() {
+      document.getElementById("favCount").textContent = favorites.length;
+    }
+
+    function copyPrompt(btn, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("کپی شد!");
+        if (btn) {
+          btn.classList.add("copied");
+          btn.textContent = "✅";
+          setTimeout(() => {
+            btn.classList.remove("copied");
+            btn.textContent = "📋";
+          }, 1400);
+        }
+      }).catch(() => {
+        // Fallback
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        showToast("کپی شد!");
+      });
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text.trim()).then(() => showToast("کپی شد!"));
+    }
+
+    function copyAllVisible() {
+      if (filteredList.length === 0) {
+        showToast("موردی برای کپی وجود ندارد");
+        return;
+      }
+      const text = filteredList.map((p, i) => `${i + 1}. ${p.text}`).join("\n");
+      navigator.clipboard.writeText(text).then(() => showToast(`${filteredList.length} مورد کپی شد!`));
+    }
+
+    function randomPrompt() {
+      let pool = getFilteredPrompts();
+      if (pool.length === 0) pool = allPrompts;
+      const item = pool[Math.floor(Math.random() * pool.length)];
+      copyPrompt(null, item.text);
+      showToast("پرامپت تصادفی کپی شد 🎲");
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute("data-theme") || "dark";
+      const next = current === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("derakhsha_theme", next);
+      document.getElementById("themeToggle").textContent = next === "dark" ? "🌙" : "☀️";
+    }
+
+    function openAbout() {
+      document.getElementById("aboutModal").classList.add("open");
+    }
+
+    function closeAbout(e) {
+      if (!e || e.target === document.getElementById("aboutModal") || e.target.closest(".btn")) {
+        document.getElementById("aboutModal").classList.remove("open");
+      }
+    }
+
+    function showToast(msg = "کپی شد!") {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2000);
+    }
+
+    // Helpers
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function escapeAttr(str) {
+      return str.replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, "&quot;");
+    }
+  </script>
+</body>
+</html>
