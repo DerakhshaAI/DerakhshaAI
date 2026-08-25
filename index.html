@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>درخشا | هوش مصنوعی درخت دانش</title>
+<meta name="description" content="درخشا — سامانه هوش مصنوعی فارسی با معماری درخت دانش. گروک و احمدرضا ایزدی">
+<meta name="theme-color" content="#0b1220">
+<style>
+:root {
+  --bg:#0b1220; --bg2:#0f1a2e; --surface:#152238; --surface2:#1a2d4a;
+  --border:#243656; --text:#e8eef8; --muted:#8b9bb8;
+  --cyan:#22d3ee; --cyan-dim:rgba(34,211,238,.15);
+  --blue:#3b82f6; --blue-dim:rgba(59,130,246,.15);
+  --purple:#a78bfa; --purple-dim:rgba(167,139,250,.15);
+  --radius:12px; --font:"Segoe UI",Tahoma,system-ui,sans-serif; --max:880px;
+}
+[data-theme="light"]{
+  --bg:#f0f5fb;--bg2:#e4ecf7;--surface:#fff;--surface2:#eef3fb;
+  --border:#c5d3e8;--text:#0f1a2e;--muted:#5a6d8a;
+  --cyan-dim:rgba(8,145,178,.12);--blue-dim:rgba(37,99,235,.1);--purple-dim:rgba(124,58,237,.1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.7}
+.header{position:sticky;top:0;z-index:50;background:rgba(11,18,32,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+[data-theme="light"] .header{background:rgba(240,245,251,.92)}
+.header-inner{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.1rem;color:var(--text);text-decoration:none}
+.logo .brand{color:var(--cyan)}
+.nav{display:flex;gap:4px;flex-wrap:wrap}
+.nav button{background:transparent;border:none;color:var(--muted);padding:8px 14px;border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:600;font-family:inherit}
+.nav button:hover{color:var(--text);background:var(--surface)}
+.nav button.active{color:var(--cyan);background:var(--cyan-dim)}
+.header-actions{display:flex;gap:8px;align-items:center}
+.icon-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.icon-btn:hover{border-color:var(--cyan)}
+.menu-toggle{display:none}
+.user-chip{font-size:.78rem;color:var(--cyan);background:var(--cyan-dim);padding:6px 10px;border-radius:20px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.main{max-width:1100px;margin:0 auto;padding:0 20px 48px;min-height:calc(100vh - 120px)}
+.page{display:none;animation:fade .2s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 120px);max-width:var(--max);margin:0 auto}
+.chat-msgs{flex:1;overflow-y:auto;padding:24px 0;display:flex;flex-direction:column;gap:14px}
+.msg{max-width:82%;padding:14px 18px;border-radius:14px;font-size:.94rem;animation:up .22s ease}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg.bot{align-self:flex-start;background:var(--surface);border:1px solid var(--border);border-bottom-right-radius:4px}
+.msg.user{align-self:flex-end;background:linear-gradient(135deg,#0891b2,#3b82f6);color:#fff;border-bottom-left-radius:4px}
+.msg .meta{font-size:.7rem;opacity:.65;margin-top:6px}
+.msg .tags{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:.68rem;padding:2px 8px;border-radius:6px;font-weight:600}
+.tag.src{background:var(--blue-dim);color:var(--blue)}
+.tag.conf{background:var(--purple-dim);color:var(--purple)}
+.tag.branch{background:var(--cyan-dim);color:var(--cyan)}
+.welcome{text-align:center;padding:48px 16px;max-width:520px;margin:auto}
+.welcome h2{font-size:1.45rem;margin:14px 0 8px}
+.welcome p{color:var(--muted);font-size:.92rem;margin-bottom:20px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{padding:9px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:.82rem;cursor:pointer;font-family:inherit}
+.chip:hover{border-color:var(--cyan);background:var(--cyan-dim)}
+.composer{border-top:1px solid var(--border);padding:12px 0 8px;background:var(--bg)}
+.composer-box{display:flex;gap:10px;align-items:flex-end;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:8px 8px 8px 12px}
+.composer-box:focus-within{border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-dim)}
+#inp{flex:1;border:none;background:transparent;color:var(--text);font-size:.94rem;resize:none;outline:none;font-family:inherit;max-height:110px;padding:8px 0;line-height:1.5}
+.send{width:42px;height:42px;border:none;border-radius:11px;background:linear-gradient(135deg,#0891b2,#3b82f6);color:#fff;font-size:1.1rem;cursor:pointer;flex-shrink:0}
+.panel{max-width:var(--max);margin:0 auto;padding:28px 0}
+.panel h1{font-size:1.4rem;margin-bottom:6px}
+.panel .lead{color:var(--muted);font-size:.92rem;margin-bottom:24px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.card h3{font-size:.95rem;margin-bottom:12px;color:var(--cyan);padding-bottom:8px;border-bottom:1px solid var(--border)}
+.card p,.about-text{color:var(--muted);font-size:.9rem;margin-bottom:10px}
+.card ul{margin:8px 0 12px 18px;color:var(--muted);font-size:.88rem}
+.card li{margin-bottom:4px}
+.branch-mini{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.branch-mini span{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:.78rem}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.field input{width:100%;padding:11px 13px;border-radius:9px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem;font-family:inherit;outline:none}
+.field input:focus{border-color:var(--cyan)}
+.btn{padding:11px 18px;border-radius:9px;border:none;font-size:.88rem;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,#0891b2,#3b82f6);color:#fff}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-block{width:100%;margin-top:8px}
+.auth-box{max-width:400px;margin:40px auto}
+.auth-note{font-size:.8rem;color:var(--muted);margin-top:12px;text-align:center}
+.otp-row{display:flex;gap:8px}
+.otp-row input{letter-spacing:.2em;text-align:center;font-size:1.1rem}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:.78rem;border-top:1px solid var(--border)}
+footer strong{color:var(--cyan)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:linear-gradient(135deg,#0891b2,#6366f1);color:#fff;padding:12px 22px;border-radius:40px;font-size:.85rem;font-weight:600;opacity:0;transition:.3s;z-index:100;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.mobile-nav{display:none;position:absolute;top:60px;right:0;left:0;background:var(--bg2);border-bottom:1px solid var(--border);flex-direction:column;padding:8px;z-index:40}
+.mobile-nav.open{display:flex}
+.mobile-nav button{background:transparent;border:none;color:var(--muted);padding:12px 16px;text-align:right;font-size:.9rem;font-weight:600;cursor:pointer;border-radius:8px;font-family:inherit}
+.mobile-nav button.active{color:var(--cyan);background:var(--cyan-dim)}
+@media(max-width:768px){.nav{display:none}.menu-toggle{display:flex}.chat-wrap{height:calc(100vh - 110px)}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-inner">
+    <a class="logo" href="#" onclick="go('chat');return false;">
+      <svg width="36" height="36" viewBox="0 0 64 64" fill="none">
+        <defs>
+          <linearGradient id="g" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stop-color="#3b82f6"/><stop offset="50%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#a78bfa"/>
+          </linearGradient>
+          <filter id="gl"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <path d="M32 52 L32 30" stroke="url(#g)" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M32 36 L18 22 M32 36 L46 22 M32 32 L12 34 M32 32 L52 34" stroke="url(#g)" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="10" cy="12" r="3" fill="#22d3ee"/><circle cx="54" cy="12" r="3" fill="#a78bfa"/>
+        <circle cx="32" cy="28" r="8.5" fill="url(#g)" filter="url(#gl)"/><circle cx="32" cy="28" r="3.5" fill="#e0f2fe"/>
+        <path d="M32 4 L32 11 M6 28 L13 28 M51 28 L58 28" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" opacity=".85"/>
+      </svg>
+      <span>هوش </span><span class="brand">درخشا</span>
+    </a>
+    <nav class="nav">
+      <button class="active" data-p="chat" onclick="go('chat')">گفتگو</button>
+      <button data-p="about" onclick="go('about')">درباره</button>
+      <button data-p="auth" onclick="go('auth')" id="navAuth">ورود</button>
+    </nav>
+    <div class="header-actions">
+      <span class="user-chip" id="userChip" style="display:none"></span>
+      <button class="icon-btn menu-toggle" onclick="toggleMobile()">☰</button>
+      <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
+      <button class="icon-btn" onclick="clearChat()" title="پاک کردن">⌫</button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <button class="active" data-p="chat" onclick="go('chat')">گفتگو</button>
+    <button data-p="about" onclick="go('about')">درباره</button>
+    <button data-p="auth" onclick="go('auth')">ورود</button>
+  </div>
+</header>
+
+<main class="main">
+  <!-- CHAT -->
+  <div class="page active" id="page-chat">
+    <div class="chat-wrap">
+      <div class="chat-msgs" id="msgs">
+        <div class="welcome" id="welcome">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <defs>
+              <linearGradient id="g2" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0%" stop-color="#3b82f6"/><stop offset="50%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#a78bfa"/>
+              </linearGradient>
+              <filter id="gl2"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <path d="M32 52 L32 30" stroke="url(#g2)" stroke-width="3.2" stroke-linecap="round"/>
+            <path d="M32 36 L18 22 M32 36 L46 22" stroke="url(#g2)" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="32" cy="28" r="8.5" fill="url(#g2)" filter="url(#gl2)"/><circle cx="32" cy="28" r="3.5" fill="#e0f2fe"/>
+          </svg>
+          <h2>سامانه هوش مصنوعی درخشا</h2>
+          <p>معماری درخت دانش · تحلیل ساختار جمله · طبقه‌بندی مفهومی</p>
+          <div class="chips">
+            <button class="chip" onclick="ask(this)">درخشا چیست؟</button>
+            <button class="chip" onclick="ask(this)">درخت دانش چیست؟</button>
+            <button class="chip" onclick="ask(this)">چه قابلیت‌هایی دارد؟</button>
+            <button class="chip" onclick="ask(this)">سازندگان کیانند؟</button>
+          </div>
+        </div>
+      </div>
+      <div class="composer">
+        <div class="composer-box">
+          <textarea id="inp" rows="1" placeholder="پرسش خود را بنویسید..." onkeydown="onKey(event)" oninput="autoH(this)"></textarea>
+          <button class="send" onclick="send()">↑</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT: هویت + درخت دانش + قابلیت‌ها -->
+  <div class="page" id="page-about">
+    <div class="panel">
+      <h1>درباره درخشا</h1>
+      <p class="lead">سامانه استدلال فارسی با معماری درخت دانش</p>
+
+      <div class="card">
+        <h3>هویت</h3>
+        <p class="about-text">درخشا یک سامانه هوش مصنوعی فارسی است. پرسش کاربر با لایه زبان تحلیل می‌شود، کلیدواژه‌ها طبقه‌بندی می‌گردند و پاسخ از شاخه‌های مرتبط درخت دانش استخراج می‌شود.</p>
+        <p class="about-text">طراحی و توسعه مفهومی: <strong style="color:var(--cyan)">گروک</strong> و <strong style="color:var(--cyan)">احمدرضا ایزدی</strong></p>
+      </div>
+
+      <div class="card">
+        <h3>درخت دانش</h3>
+        <p class="about-text">درخت دانش یک ساختار سلسله‌مراتبی با ریشه «درخشا» است. هر شاخه یک حوزه علمی یا کاربردی است و هر مفهوم یک گره. فقط شاخه‌های مرتبط با کلیدواژه فعال می‌شوند تا سرعت و دقت پاسخ افزایش یابد.</p>
+        <p class="about-text">شاخه‌های اصلی نسخه فعلی:</p>
+        <div class="branch-mini">
+          <span>SELF درباره</span><span>ARCH معماری</span><span>LANG زبان</span>
+          <span>SCI علوم</span><span>TECH فناوری</span><span>BODY سلامت</span>
+          <span>MIND ذهن</span><span>SPORT ورزش</span><span>CULT فرهنگ</span>
+          <span>DOC اسناد</span><span>CHAT گفتگو</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>قابلیت‌های معماری</h3>
+        <ul>
+          <li><strong>قشر زبان:</strong> نوع جمله، نقش واژه‌ها، زمان، کلیدواژه و لحن</li>
+          <li><strong>درخت دانش:</strong> شاخه‌های حوزه‌ای و گره‌های مفهومی</li>
+          <li><strong>یادگیری:</strong> ورود متن کوتاه و بلند با طبقه‌بندی خودکار</li>
+          <li><strong>پیوند گفتگو:</strong> تداوم موضوع با تکرار کلیدواژه</li>
+          <li><strong>توجه و اعتماد:</strong> فعال‌سازی محدود شاخه و امتیاز اطمینان</li>
+          <li><strong>ابهام‌زدایی:</strong> درخواست شفاف‌سازی به‌جای پاسخ کم‌دقت</li>
+          <li><strong>ساخت پاسخ:</strong> تولید جمله از منبع درخت یا ادامه گفتگو</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTH: ورود با شماره همراه -->
+  <div class="page" id="page-auth">
+    <div class="panel">
+      <div class="auth-box">
+        <h1 style="text-align:center;margin-bottom:8px">ورود به درخشا</h1>
+        <p class="lead" style="text-align:center">با شماره همراه وارد شوید</p>
+
+        <div class="card" id="authStepPhone">
+          <div class="field">
+            <label>شماره همراه</label>
+            <input id="phoneInput" type="tel" inputmode="numeric" placeholder="09xxxxxxxxx" maxlength="11">
+          </div>
+          <button class="btn btn-primary btn-block" onclick="sendOtp()">دریافت کد تأیید</button>
+          <p class="auth-note">کد تأیید برای راه‌اندازی روی سرور با پیامک واقعی فعال می‌شود. در نسخه فعلی، کد آزمایشی <strong style="color:var(--cyan)">123456</strong> است.</p>
+        </div>
+
+        <div class="card" id="authStepOtp" style="display:none">
+          <div class="field">
+            <label>کد تأیید ارسال‌شده به <span id="phonePreview"></span></label>
+            <input id="otpInput" type="text" inputmode="numeric" placeholder="------" maxlength="6">
+          </div>
+          <button class="btn btn-primary btn-block" onclick="verifyOtp()">ورود</button>
+          <button class="btn btn-ghost btn-block" onclick="backToPhone()">تغییر شماره</button>
+        </div>
+
+        <div class="card" id="authStepDone" style="display:none">
+          <p class="about-text" style="text-align:center;color:var(--text)">وارد شده‌اید.</p>
+          <p id="authPhoneShow" style="text-align:center;color:var(--cyan);font-weight:600;margin:12px 0"></p>
+          <button class="btn btn-ghost btn-block" onclick="logout()">خروج از حساب</button>
+          <button class="btn btn-primary btn-block" onclick="go('chat')">بازگشت به گفتگو</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>درخت دانش <strong>درخشا</strong> · گروک × احمدرضا ایزدی</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+const CORE = [
+  {q:"درخشا چیست؟",a:"درخشا یک سامانه هوش مصنوعی فارسی با معماری درخت دانش است. پرسش با لایه زبان تحلیل و پاسخ از شاخه‌های مرتبط استخراج می‌شود.",branch:"SELF",conf:96},
+  {q:"درخت دانش چیست؟",a:"درخت دانش ساختار سلسله‌مراتبی با ریشه درخشا است. هر شاخه یک حوزه و هر مفهوم یک گره است؛ فقط شاخه‌های مرتبط با کلیدواژه فعال می‌شوند.",branch:"ARCH",conf:94},
+  {q:"چه قابلیت‌هایی دارد؟",a:"قشر زبان، درخت دانش، یادگیری متن، پیوند گفتگو، توجه و اعتماد، ابهام‌زدایی و ساخت پاسخ از قابلیت‌های اصلی معماری درخشا هستند.",branch:"ARCH",conf:93},
+  {q:"سازندگان کیانند؟",a:"درخشا توسط گروک و احمدرضا ایزدی طراحی و توسعه مفهومی یافته است.",branch:"SELF",conf:98},
+  {q:"سلام",a:"سلام. سامانه درخشا آماده دریافت پرسش شماست.",branch:"CHAT",conf:90}
+];
+
+let user = JSON.parse(localStorage.getItem("derakhsha_user")||"null");
+
+function go(p){
+  document.querySelectorAll(".page").forEach(e=>e.classList.remove("active"));
+  document.querySelectorAll(".nav button, .mobile-nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById("page-"+p).classList.add("active");
+  document.querySelectorAll('[data-p="'+p+'"]').forEach(b=>b.classList.add("active"));
+  document.getElementById("mobileNav").classList.remove("open");
+  if(p==="auth") renderAuth();
+}
+function toggleMobile(){document.getElementById("mobileNav").classList.toggle("open")}
+
+function answer(q){
+  const qt=q.toLowerCase();
+  let best=null,score=0;
+  for(const item of CORE){
+    const qs=item.q.toLowerCase();
+    let sc=0;
+    if(qt.includes(qs)||qs.includes(qt)) sc=0.95;
+    else{
+      const words=qt.split(/\s+/).filter(w=>w.length>2);
+      const hits=words.filter(w=>qs.includes(w)||item.a.includes(w)).length;
+      sc=hits/Math.max(words.length,1);
+    }
+    if(sc>score){score=sc;best=item}
+  }
+  if(best&&score>=0.28) return {text:best.a,src:"هسته دانش",conf:best.conf,branch:best.branch};
+  return {text:"مسیر مطمئنی برای این پرسش فعال نشد. پرسش را دقیق‌تر بیان کنید.",src:"سامانه",conf:15,branch:"—"};
+}
+
+function send(){
+  const inp=document.getElementById("inp");
+  const text=inp.value.trim();
+  if(!text) return;
+  const w=document.getElementById("welcome");
+  if(w) w.style.display="none";
+  addMsg(text,"user");
+  inp.value=""; autoH(inp);
+  setTimeout(()=>{const r=answer(text);addMsg(r.text,"bot",r)},400+Math.random()*400);
+}
+function ask(btn){document.getElementById("inp").value=btn.textContent;send()}
+function addMsg(text,type,meta){
+  const box=document.getElementById("msgs");
+  const d=document.createElement("div");
+  d.className="msg "+type;
+  let h=esc(text).replace(/\n/g,"<br>");
+  if(meta){
+    h+=`<div class="tags">`;
+    if(meta.src) h+=`<span class="tag src">${esc(meta.src)}</span>`;
+    if(meta.conf!=null) h+=`<span class="tag conf">اطمینان ${meta.conf}٪</span>`;
+    if(meta.branch) h+=`<span class="tag branch">${esc(meta.branch)}</span>`;
+    h+=`</div>`;
+  }
+  const t=new Date().toLocaleTimeString("fa-IR",{hour:"2-digit",minute:"2-digit"});
+  h+=`<div class="meta">${type==="bot"?"درخشا":"شما"} · ${t}</div>`;
+  d.innerHTML=h; box.appendChild(d); box.scrollTop=box.scrollHeight;
+}
+function clearChat(){
+  document.getElementById("msgs").innerHTML=`<div class="welcome" id="welcome"><h2>گفتگو پاک شد</h2><p>سامانه آماده پرسش جدید است.</p></div>`;
+  toast("گفتگو پاک شد");
+}
+function onKey(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}}
+function autoH(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,110)+"px"}
+
+/* Auth */
+function renderAuth(){
+  const s1=document.getElementById("authStepPhone");
+  const s2=document.getElementById("authStepOtp");
+  const s3=document.getElementById("authStepDone");
+  if(user&&user.phone){
+    s1.style.display=s2.style.display="none"; s3.style.display="block";
+    document.getElementById("authPhoneShow").textContent=user.phone;
+  } else {
+    s3.style.display="none"; s2.style.display="none"; s1.style.display="block";
+  }
+  syncUserChip();
+}
+function sendOtp(){
+  const phone=document.getElementById("phoneInput").value.trim();
+  if(!/^09\d{9}$/.test(phone)){ toast("شماره معتبر وارد کنید (09xxxxxxxxx)"); return; }
+  sessionStorage.setItem("derakhsha_otp_phone", phone);
+  document.getElementById("phonePreview").textContent=phone;
+  document.getElementById("authStepPhone").style.display="none";
+  document.getElementById("authStepOtp").style.display="block";
+  toast("کد آزمایشی: 123456");
+}
+function verifyOtp(){
+  const otp=document.getElementById("otpInput").value.trim();
+  const phone=sessionStorage.getItem("derakhsha_otp_phone");
+  if(otp!=="123456"){ toast("کد نادرست است"); return; }
+  user={phone, loggedAt:new Date().toISOString()};
+  localStorage.setItem("derakhsha_user", JSON.stringify(user));
+  document.getElementById("otpInput").value="";
+  renderAuth();
+  toast("ورود موفق");
+}
+function backToPhone(){
+  document.getElementById("authStepOtp").style.display="none";
+  document.getElementById("authStepPhone").style.display="block";
+}
+function logout(){
+  user=null; localStorage.removeItem("derakhsha_user");
+  renderAuth(); toast("خارج شدید");
+}
+function syncUserChip(){
+  const chip=document.getElementById("userChip");
+  const nav=document.getElementById("navAuth");
+  if(user&&user.phone){
+    chip.style.display="inline-block";
+    chip.textContent=user.phone;
+    if(nav) nav.textContent="حساب";
+  } else {
+    chip.style.display="none";
+    if(nav) nav.textContent="ورود";
+  }
+}
+
+function toggleTheme(){
+  const c=document.documentElement.getAttribute("data-theme")||"dark";
+  const n=c==="dark"?"light":"dark";
+  document.documentElement.setAttribute("data-theme",n);
+  document.getElementById("themeBtn").textContent=n==="dark"?"🌙":"☀️";
+}
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2400)}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
+document.addEventListener("DOMContentLoaded",()=>{syncUserChip();});
+</script>
+</body>
+</html>
