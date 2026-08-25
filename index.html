@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>درخشا | هوش مصنوعی درخت دانش</title>
+<meta name="description" content="درخشا — سامانه هوش مصنوعی فارسی با معماری درخت دانش">
+<meta name="theme-color" content="#0b1220">
+<style>
+:root {
+  --bg:#0b1220; --bg2:#0f1a2e; --surface:#152238; --surface2:#1a2d4a;
+  --border:#243656; --text:#e8eef8; --muted:#8b9bb8;
+  --cyan:#22d3ee; --cyan-dim:rgba(34,211,238,.15);
+  --blue:#3b82f6; --blue-dim:rgba(59,130,246,.15);
+  --purple:#a78bfa; --purple-dim:rgba(167,139,250,.15);
+  --radius:12px; --font:"Segoe UI",Tahoma,system-ui,sans-serif; --max:880px;
+}
+[data-theme="light"]{
+  --bg:#f0f5fb;--bg2:#e4ecf7;--surface:#fff;--surface2:#eef3fb;
+  --border:#c5d3e8;--text:#0f1a2e;--muted:#5a6d8a;
+  --cyan-dim:rgba(8,145,178,.12);--blue-dim:rgba(37,99,235,.1);--purple-dim:rgba(124,58,237,.1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.7}
+.header{position:sticky;top:0;z-index:50;background:rgba(11,18,32,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+[data-theme="light"] .header{background:rgba(240,245,251,.92)}
+.header-inner{max-width:1100px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.1rem;color:var(--text);text-decoration:none}
+.logo .brand{color:var(--cyan)}
+.nav{display:flex;gap:4px;flex-wrap:wrap}
+.nav button{background:transparent;border:none;color:var(--muted);padding:8px 14px;border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:600;font-family:inherit}
+.nav button:hover{color:var(--text);background:var(--surface)}
+.nav button.active{color:var(--cyan);background:var(--cyan-dim)}
+.header-actions{display:flex;gap:8px;align-items:center}
+.icon-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center}
+.icon-btn:hover{border-color:var(--cyan)}
+.icon-btn.active-panel{border-color:var(--cyan);background:var(--cyan-dim);color:var(--cyan)}
+.menu-toggle{display:none}
+.user-chip{font-size:.78rem;color:var(--cyan);background:var(--cyan-dim);padding:6px 10px;border-radius:20px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.main{max-width:1100px;margin:0 auto;padding:0 16px 48px;min-height:calc(100vh - 120px)}
+.page{display:none;animation:fade .2s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* Chat layout with history */
+.chat-layout{display:flex;height:calc(100vh - 120px);max-width:1100px;margin:0 auto;gap:0;position:relative}
+.history-panel{
+  width:0;overflow:hidden;background:var(--bg2);border-left:1px solid var(--border);
+  transition:width .25s ease;flex-shrink:0;display:flex;flex-direction:column;
+}
+.history-panel.open{width:280px}
+.history-head{padding:14px 14px 10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.history-head h3{font-size:.9rem;color:var(--cyan)}
+.history-list{flex:1;overflow-y:auto;padding:8px}
+.hist-item{
+  padding:10px 12px;border-radius:10px;cursor:pointer;margin-bottom:6px;
+  border:1px solid transparent;background:var(--surface);transition:.15s;
+}
+.hist-item:hover,.hist-item.active{border-color:var(--cyan);background:var(--cyan-dim)}
+.hist-item .t{font-size:.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-item .d{font-size:.7rem;color:var(--muted);margin-top:3px}
+.hist-empty{text-align:center;color:var(--muted);font-size:.82rem;padding:24px 12px}
+
+.chat-wrap{flex:1;display:flex;flex-direction:column;min-width:0;max-width:var(--max);margin:0 auto;width:100%}
+.chat-msgs{flex:1;overflow-y:auto;padding:24px 8px;display:flex;flex-direction:column;gap:14px}
+.msg{max-width:82%;padding:14px 18px;border-radius:14px;font-size:.94rem;animation:up .22s ease}
+@keyframes up{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg.bot{align-self:flex-start;background:var(--surface);border:1px solid var(--border);border-bottom-right-radius:4px}
+.msg.user{align-self:flex-end;background:linear-gradient(135deg,#0891b2,#3b82f6);color:#fff;border-bottom-left-radius:4px}
+.msg .meta{font-size:.7rem;opacity:.65;margin-top:6px}
+.msg .tags{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:.68rem;padding:2px 8px;border-radius:6px;font-weight:600}
+.tag.src{background:var(--blue-dim);color:var(--blue)}
+.tag.conf{background:var(--purple-dim);color:var(--purple)}
+.tag.branch{background:var(--cyan-dim);color:var(--cyan)}
+
+/* Bot row with avatar model */
+.bot-row{align-self:flex-start;display:flex;gap:10px;align-items:flex-end;max-width:92%;animation:up .22s ease}
+.bot-row .msg{max-width:100%}
+
+.avatar-model{
+  width:42px;height:42px;flex-shrink:0;border-radius:12px;
+  background:var(--surface);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.avatar-model.thinking{
+  animation:pulse-glow 1.2s ease-in-out infinite;
+  border-color:var(--cyan);
+  box-shadow:0 0 16px var(--cyan-dim);
+}
+.avatar-model.thinking .circuit{animation:spin-slow 3s linear infinite}
+.avatar-model.thinking .core-dot{animation:blink 0.8s ease infinite}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 8px var(--cyan-dim)}50%{box-shadow:0 0 22px rgba(34,211,238,.45)}}
+@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes float-y{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+.welcome{text-align:center;padding:40px 16px;max-width:520px;margin:auto}
+.welcome h2{font-size:1.45rem;margin:14px 0 8px}
+.welcome p{color:var(--muted);font-size:.92rem;margin-bottom:20px}
+.welcome-logo{margin:0 auto 8px;animation:float-y 3s ease-in-out infinite}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{padding:9px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:.82rem;cursor:pointer;font-family:inherit}
+.chip:hover{border-color:var(--cyan);background:var(--cyan-dim)}
+.composer{border-top:1px solid var(--border);padding:12px 0 8px;background:var(--bg)}
+.composer-box{display:flex;gap:10px;align-items:flex-end;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:8px 8px 8px 12px}
+.composer-box:focus-within{border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-dim)}
+#inp{flex:1;border:none;background:transparent;color:var(--text);font-size:.94rem;resize:none;outline:none;font-family:inherit;max-height:110px;padding:8px 0;line-height:1.5}
+.send{width:42px;height:42px;border:none;border-radius:11px;background:linear-gradient(135deg,#0891b2,#3b82f6);color:#fff;font-size:1.1rem;cursor:pointer;flex-shrink:0}
+
+/* typing indicator */
+.typing-row{align-self:flex-start;display:flex;gap:10px;align-items:center}
+.typing-bubble{
+  background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:12px 16px;display:flex;gap:5px;align-items:center;
+}
+.typing-bubble span{
+  width:7px;height:7px;border-radius:50%;background:var(--cyan);
+  animation:dot 1.2s ease-in-out infinite;
+}
+.typing-bubble span:nth-child(2){animation-delay:.2s}
+.typing-bubble span:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+
+.panel{max-width:var(--max);margin:0 auto;padding:28px 0}
+.panel h1{font-size:1.4rem;margin-bottom:6px}
+.panel .lead{color:var(--muted);font-size:.92rem;margin-bottom:24px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.card h3{font-size:.95rem;margin-bottom:12px;color:var(--cyan);padding-bottom:8px;border-bottom:1px solid var(--border)}
+.about-text{color:var(--muted);font-size:.9rem;margin-bottom:10px}
+.card ul{margin:8px 0 12px 18px;color:var(--muted);font-size:.88rem}
+.card li{margin-bottom:4px}
+.branch-mini{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.branch-mini span{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:.78rem}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:5px;font-weight:600}
+.field input{width:100%;padding:11px 13px;border-radius:9px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem;font-family:inherit;outline:none}
+.field input:focus{border-color:var(--cyan)}
+.btn{padding:11px 18px;border-radius:9px;border:none;font-size:.88rem;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,#0891b2,#3b82f6);color:#fff}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-block{width:100%;margin-top:8px}
+.btn-sm{padding:6px 10px;font-size:.75rem}
+.auth-box{max-width:400px;margin:40px auto}
+.auth-note{font-size:.8rem;color:var(--muted);margin-top:12px;text-align:center}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:.78rem;border-top:1px solid var(--border)}
+footer strong{color:var(--cyan)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:linear-gradient(135deg,#0891b2,#6366f1);color:#fff;padding:12px 22px;border-radius:40px;font-size:.85rem;font-weight:600;opacity:0;transition:.3s;z-index:100;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.mobile-nav{display:none;position:absolute;top:60px;right:0;left:0;background:var(--bg2);border-bottom:1px solid var(--border);flex-direction:column;padding:8px;z-index:40}
+.mobile-nav.open{display:flex}
+.mobile-nav button{background:transparent;border:none;color:var(--muted);padding:12px 16px;text-align:right;font-size:.9rem;font-weight:600;cursor:pointer;border-radius:8px;font-family:inherit}
+.mobile-nav button.active{color:var(--cyan);background:var(--cyan-dim)}
+@media(max-width:768px){
+  .nav{display:none}.menu-toggle{display:flex}
+  .chat-layout{height:calc(100vh - 110px)}
+  .history-panel.open{position:absolute;right:0;top:0;bottom:0;width:min(280px,85vw);z-index:30;box-shadow:-8px 0 24px rgba(0,0,0,.4)}
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-inner">
+    <a class="logo" href="#" onclick="go('chat');return false;">
+      <!-- لوگو: درخت + مدار تکنولوژی -->
+      <svg width="38" height="38" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="lg" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stop-color="#3b82f6"/><stop offset="45%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#a78bfa"/>
+          </linearGradient>
+          <filter id="gl"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <!-- roots / ground line tech -->
+        <path d="M18 56 H46" stroke="#3b82f6" stroke-width="1.5" opacity=".5"/>
+        <circle cx="18" cy="56" r="2" fill="#22d3ee"/><circle cx="46" cy="56" r="2" fill="#a78bfa"/>
+        <!-- trunk as circuit bus -->
+        <path d="M32 52 L32 28" stroke="url(#lg)" stroke-width="3.5" stroke-linecap="round"/>
+        <!-- branches = dendrites + circuit traces -->
+        <path d="M32 40 L14 26 M32 40 L50 26" stroke="url(#lg)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M32 34 L10 34 M32 34 L54 34" stroke="url(#lg)" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M14 26 L8 14 M14 26 L16 12 M50 26 L56 14 M50 26 L48 12" stroke="url(#lg)" stroke-width="1.4" stroke-linecap="round"/>
+        <!-- tech nodes -->
+        <rect x="6" y="11" width="6" height="6" rx="1" fill="#22d3ee"/>
+        <rect x="52" y="11" width="6" height="6" rx="1" fill="#a78bfa"/>
+        <circle cx="16" cy="12" r="2.2" fill="#3b82f6"/>
+        <circle cx="48" cy="12" r="2.2" fill="#22d3ee"/>
+        <circle cx="10" cy="34" r="2.5" fill="#22d3ee"/>
+        <circle cx="54" cy="34" r="2.5" fill="#a78bfa"/>
+        <!-- core chip / neuron -->
+        <circle cx="32" cy="26" r="9" fill="url(#lg)" filter="url(#gl)"/>
+        <rect x="27" y="21" width="10" height="10" rx="2" fill="#0b1220" opacity=".35"/>
+        <circle cx="32" cy="26" r="3.2" fill="#e0f2fe"/>
+        <!-- signal rays -->
+        <path d="M32 6 L32 12 M8 26 L14 26 M50 26 L56 26" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+      </svg>
+      <span>هوش </span><span class="brand">درخشا</span>
+    </a>
+    <nav class="nav">
+      <button class="active" data-p="chat" onclick="go('chat')">گفتگو</button>
+      <button data-p="about" onclick="go('about')">درباره</button>
+      <button data-p="auth" onclick="go('auth')" id="navAuth">ورود</button>
+    </nav>
+    <div class="header-actions">
+      <span class="user-chip" id="userChip" style="display:none"></span>
+      <button class="icon-btn menu-toggle" onclick="toggleMobile()">☰</button>
+      <button class="icon-btn" id="histBtn" onclick="toggleHistory()" title="تاریخچه گفتگو">☰◎</button>
+      <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
+      <button class="icon-btn" onclick="newChat()" title="گفتگوی جدید">＋</button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <button class="active" data-p="chat" onclick="go('chat')">گفتگو</button>
+    <button data-p="about" onclick="go('about')">درباره</button>
+    <button data-p="auth" onclick="go('auth')">ورود</button>
+  </div>
+</header>
+
+<main class="main">
+  <div class="page active" id="page-chat">
+    <div class="chat-layout">
+      <aside class="history-panel" id="historyPanel">
+        <div class="history-head">
+          <h3>تاریخچه گفتگو</h3>
+          <button class="btn btn-ghost btn-sm" onclick="clearAllHistory()">پاک‌سازی</button>
+        </div>
+        <div class="history-list" id="historyList"></div>
+      </aside>
+      <div class="chat-wrap">
+        <div class="chat-msgs" id="msgs"></div>
+        <div class="composer">
+          <div class="composer-box">
+            <textarea id="inp" rows="1" placeholder="پرسش خود را بنویسید..." onkeydown="onKey(event)" oninput="autoH(this)"></textarea>
+            <button class="send" onclick="send()">↑</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-about">
+    <div class="panel">
+      <h1>درباره درخشا</h1>
+      <p class="lead">سامانه استدلال فارسی با معماری درخت دانش</p>
+      <div class="card">
+        <h3>هویت</h3>
+        <p class="about-text">درخشا یک سامانه هوش مصنوعی فارسی است. پرسش با لایه زبان تحلیل می‌شود، کلیدواژه‌ها طبقه‌بندی می‌گردند و پاسخ از شاخه‌های مرتبط درخت دانش استخراج می‌شود.</p>
+        <p class="about-text">طراحی و توسعه مفهومی: <strong style="color:var(--cyan)">گروک</strong> و <strong style="color:var(--cyan)">احمدرضا ایزدی</strong></p>
+      </div>
+      <div class="card">
+        <h3>درخت دانش</h3>
+        <p class="about-text">ساختار سلسله‌مراتبی با ریشه «درخشا». هر شاخه یک حوزه است و هر مفهوم یک گره. فقط شاخه‌های مرتبط با کلیدواژه فعال می‌شوند.</p>
+        <div class="branch-mini">
+          <span>SELF درباره</span><span>ARCH معماری</span><span>LANG زبان</span>
+          <span>SCI علوم</span><span>TECH فناوری</span><span>BODY سلامت</span>
+          <span>MIND ذهن</span><span>SPORT ورزش</span><span>CULT فرهنگ</span>
+          <span>DOC اسناد</span><span>CHAT گفتگو</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>قابلیت‌های معماری</h3>
+        <ul>
+          <li><strong>قشر زبان:</strong> نوع جمله، نقش واژه‌ها، زمان، کلیدواژه و لحن</li>
+          <li><strong>درخت دانش:</strong> شاخه‌های حوزه‌ای و گره‌های مفهومی</li>
+          <li><strong>یادگیری:</strong> ورود متن با طبقه‌بندی خودکار</li>
+          <li><strong>پیوند گفتگو:</strong> تداوم موضوع با تکرار کلیدواژه</li>
+          <li><strong>توجه و اعتماد:</strong> فعال‌سازی محدود و امتیاز اطمینان</li>
+          <li><strong>ابهام‌زدایی و ساخت پاسخ:</strong> شفاف‌سازی و تولید جمله از منبع</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-auth">
+    <div class="panel">
+      <div class="auth-box">
+        <h1 style="text-align:center;margin-bottom:8px">ورود به درخشا</h1>
+        <p class="lead" style="text-align:center">با شماره همراه وارد شوید</p>
+        <div class="card" id="authStepPhone">
+          <div class="field"><label>شماره همراه</label>
+            <input id="phoneInput" type="tel" inputmode="numeric" placeholder="09xxxxxxxxx" maxlength="11">
+          </div>
+          <button class="btn btn-primary btn-block" onclick="sendOtp()">دریافت کد تأیید</button>
+          <p class="auth-note">کد آزمایشی: <strong style="color:var(--cyan)">123456</strong> — روی سرور به پیامک واقعی وصل می‌شود.</p>
+        </div>
+        <div class="card" id="authStepOtp" style="display:none">
+          <div class="field"><label>کد تأیید · <span id="phonePreview"></span></label>
+            <input id="otpInput" type="text" inputmode="numeric" placeholder="------" maxlength="6">
+          </div>
+          <button class="btn btn-primary btn-block" onclick="verifyOtp()">ورود</button>
+          <button class="btn btn-ghost btn-block" onclick="backToPhone()">تغییر شماره</button>
+        </div>
+        <div class="card" id="authStepDone" style="display:none">
+          <p class="about-text" style="text-align:center;color:var(--text)">وارد شده‌اید.</p>
+          <p id="authPhoneShow" style="text-align:center;color:var(--cyan);font-weight:600;margin:12px 0"></p>
+          <button class="btn btn-ghost btn-block" onclick="logout()">خروج</button>
+          <button class="btn btn-primary btn-block" onclick="go('chat')">گفتگو</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer>درخت دانش <strong>درخشا</strong> · گروک × احمدرضا ایزدی</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* —— SVG مدل آواتار (درخت + تکنولوژی) —— */
+const AVATAR_SVG = `<svg class="circuit" width="28" height="28" viewBox="0 0 64 64" fill="none">
+  <defs><linearGradient id="ag" x1="0" y1="1" x2="1" y2="0">
+    <stop offset="0%" stop-color="#3b82f6"/><stop offset="50%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#a78bfa"/>
+  </linearGradient></defs>
+  <path d="M32 50 L32 28" stroke="url(#ag)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M32 38 L16 24 M32 38 L48 24 M32 32 L12 32 M32 32 L52 32" stroke="url(#ag)" stroke-width="1.8" stroke-linecap="round"/>
+  <rect x="8" y="12" width="5" height="5" rx="1" fill="#22d3ee"/>
+  <rect x="51" y="12" width="5" height="5" rx="1" fill="#a78bfa"/>
+  <circle class="core-dot" cx="32" cy="26" r="8" fill="url(#ag)"/>
+  <circle cx="32" cy="26" r="3" fill="#e0f2fe"/>
+</svg>`;
+
+const WELCOME_SVG = `<svg class="welcome-logo" width="72" height="72" viewBox="0 0 64 64" fill="none">
+  <defs><linearGradient id="wg" x1="0" y1="1" x2="1" y2="0">
+    <stop offset="0%" stop-color="#3b82f6"/><stop offset="50%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#a78bfa"/>
+  </linearGradient>
+  <filter id="wgl"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+  <path d="M18 56 H46" stroke="#3b82f6" stroke-width="1.5" opacity=".5"/>
+  <path d="M32 52 L32 28" stroke="url(#wg)" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M32 40 L14 26 M32 40 L50 26 M32 34 L10 34 M32 34 L54 34" stroke="url(#wg)" stroke-width="2" stroke-linecap="round"/>
+  <rect x="6" y="11" width="6" height="6" rx="1" fill="#22d3ee"/>
+  <rect x="52" y="11" width="6" height="6" rx="1" fill="#a78bfa"/>
+  <circle cx="32" cy="26" r="9" fill="url(#wg)" filter="url(#wgl)"/>
+  <circle cx="32" cy="26" r="3.2" fill="#e0f2fe"/>
+  <path d="M32 6 L32 12 M8 26 L14 26 M50 26 L56 26" stroke="#a78bfa" stroke-width="2" stroke-linecap="round"/>
+</svg>`;
+
+const CORE = [
+  {q:"درخشا چیست؟",a:"درخشا یک سامانه هوش مصنوعی فارسی با معماری درخت دانش است. پرسش با لایه زبان تحلیل و پاسخ از شاخه‌های مرتبط استخراج می‌شود.",branch:"SELF",conf:96},
+  {q:"درخت دانش چیست؟",a:"درخت دانش ساختار سلسله‌مراتبی با ریشه درخشا است. هر شاخه یک حوزه و هر مفهوم یک گره است؛ فقط شاخه‌های مرتبط فعال می‌شوند.",branch:"ARCH",conf:94},
+  {q:"چه قابلیت‌هایی دارد؟",a:"قشر زبان، درخت دانش، یادگیری، پیوند گفتگو، توجه و اعتماد، ابهام‌زدایی و ساخت پاسخ از قابلیت‌های اصلی درخشا هستند.",branch:"ARCH",conf:93},
+  {q:"سازندگان کیانند؟",a:"درخشا توسط گروک و احمدرضا ایزدی طراحی و توسعه مفهومی یافته است.",branch:"SELF",conf:98},
+  {q:"سلام",a:"سلام. سامانه درخشا آماده دریافت پرسش شماست.",branch:"CHAT",conf:90}
+];
+
+let user = JSON.parse(localStorage.getItem("derakhsha_user")||"null");
+let sessions = JSON.parse(localStorage.getItem("derakhsha_sessions")||"[]");
+let currentId = localStorage.getItem("derakhsha_current") || null;
+
+function saveSessions(){
+  localStorage.setItem("derakhsha_sessions", JSON.stringify(sessions));
+  if(currentId) localStorage.setItem("derakhsha_current", currentId);
+}
+function getCurrent(){ return sessions.find(s=>s.id===currentId) || null; }
+
+function ensureSession(){
+  if(currentId && getCurrent()) return getCurrent();
+  const s = { id: "s_"+Date.now(), title: "گفتگوی جدید", messages: [], updated: Date.now() };
+  sessions.unshift(s);
+  currentId = s.id;
+  saveSessions();
+  return s;
+}
+
+function renderWelcome(){
+  return `<div class="welcome" id="welcome">
+    ${WELCOME_SVG}
+    <h2>سامانه هوش مصنوعی درخشا</h2>
+    <p>معماری درخت دانش · تحلیل ساختار جمله · طبقه‌بندی مفهومی</p>
+    <div class="chips">
+      <button class="chip" onclick="ask(this)">درخشا چیست؟</button>
+      <button class="chip" onclick="ask(this)">درخت دانش چیست؟</button>
+      <button class="chip" onclick="ask(this)">چه قابلیت‌هایی دارد؟</button>
+      <button class="chip" onclick="ask(this)">سازندگان کیانند؟</button>
+    </div>
+  </div>`;
+}
+
+function renderMessages(){
+  const box = document.getElementById("msgs");
+  const s = getCurrent();
+  if(!s || !s.messages.length){
+    box.innerHTML = renderWelcome();
+    return;
+  }
+  box.innerHTML = "";
+  s.messages.forEach(m=>{
+    if(m.role==="user") addMsgDOM(m.text, "user", null, false);
+    else addMsgDOM(m.text, "bot", m.meta, false);
+  });
+  box.scrollTop = box.scrollHeight;
+}
+
+function renderHistory(){
+  const list = document.getElementById("historyList");
+  if(!sessions.length){
+    list.innerHTML = `<div class="hist-empty">هنوز گفتگویی ذخیره نشده است.</div>`;
+    return;
+  }
+  list.innerHTML = sessions.map(s=>{
+    const d = new Date(s.updated).toLocaleString("fa-IR",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"});
+    return `<div class="hist-item ${s.id===currentId?"active":""}" onclick="loadSession('${s.id}')">
+      <div class="t">${esc(s.title)}</div>
+      <div class="d">${d} · ${s.messages.length} پیام</div>
+    </div>`;
+  }).join("");
+}
+
+function loadSession(id){
+  currentId = id;
+  saveSessions();
+  renderMessages();
+  renderHistory();
+  if(window.innerWidth<768) document.getElementById("historyPanel").classList.remove("open");
+}
+
+function newChat(){
+  const s = { id: "s_"+Date.now(), title: "گفتگوی جدید", messages: [], updated: Date.now() };
+  sessions.unshift(s);
+  currentId = s.id;
+  saveSessions();
+  renderMessages();
+  renderHistory();
+  toast("گفتگوی جدید");
+}
+
+function clearAllHistory(){
+  if(!confirm("همه تاریخچه پاک شود؟")) return;
+  sessions = [];
+  currentId = null;
+  saveSessions();
+  ensureSession();
+  renderMessages();
+  renderHistory();
+  toast("تاریخچه پاک شد");
+}
+
+function toggleHistory(){
+  const p = document.getElementById("historyPanel");
+  p.classList.toggle("open");
+  document.getElementById("histBtn").classList.toggle("active-panel", p.classList.contains("open"));
+  renderHistory();
+}
+
+function go(p){
+  document.querySelectorAll(".page").forEach(e=>e.classList.remove("active"));
+  document.querySelectorAll(".nav button, .mobile-nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById("page-"+p).classList.add("active");
+  document.querySelectorAll('[data-p="'+p+'"]').forEach(b=>b.classList.add("active"));
+  document.getElementById("mobileNav").classList.remove("open");
+  if(p==="auth") renderAuth();
+}
+function toggleMobile(){document.getElementById("mobileNav").classList.toggle("open")}
+
+function answer(q){
+  const qt=q.toLowerCase();
+  let best=null,score=0;
+  for(const item of CORE){
+    const qs=item.q.toLowerCase();
+    let sc=0;
+    if(qt.includes(qs)||qs.includes(qt)) sc=0.95;
+    else{
+      const words=qt.split(/\s+/).filter(w=>w.length>2);
+      const hits=words.filter(w=>qs.includes(w)||item.a.includes(w)).length;
+      sc=hits/Math.max(words.length,1);
+    }
+    if(sc>score){score=sc;best=item}
+  }
+  if(best&&score>=0.28) return {text:best.a,src:"هسته دانش",conf:best.conf,branch:best.branch};
+  return {text:"مسیر مطمئنی برای این پرسش فعال نشد. پرسش را دقیق‌تر بیان کنید.",src:"سامانه",conf:15,branch:"—"};
+}
+
+function send(){
+  const inp=document.getElementById("inp");
+  const text=inp.value.trim();
+  if(!text) return;
+  const s = ensureSession();
+  if(s.title==="گفتگوی جدید") s.title = text.slice(0,36)+(text.length>36?"…":"");
+  const w=document.getElementById("welcome");
+  if(w) w.remove();
+
+  s.messages.push({role:"user", text});
+  addMsgDOM(text, "user", null, true);
+  inp.value=""; autoH(inp);
+  s.updated = Date.now();
+  saveSessions();
+  renderHistory();
+
+  showTyping();
+  setTimeout(()=>{
+    hideTyping();
+    const r=answer(text);
+    s.messages.push({role:"bot", text:r.text, meta:r});
+    s.updated = Date.now();
+    saveSessions();
+    addMsgDOM(r.text, "bot", r, true);
+    renderHistory();
+  }, 900+Math.random()*700);
+}
+
+function showTyping(){
+  const box=document.getElementById("msgs");
+  const row=document.createElement("div");
+  row.className="typing-row";
+  row.id="typingRow";
+  row.innerHTML = `<div class="avatar-model thinking">${AVATAR_SVG}</div>
+    <div class="typing-bubble"><span></span><span></span><span></span></div>`;
+  box.appendChild(row);
+  box.scrollTop=box.scrollHeight;
+}
+function hideTyping(){
+  const t=document.getElementById("typingRow");
+  if(t) t.remove();
+}
+
+function addMsgDOM(text, type, meta, scroll){
+  const box=document.getElementById("msgs");
+  const time=new Date().toLocaleTimeString("fa-IR",{hour:"2-digit",minute:"2-digit"});
+  if(type==="bot"){
+    const row=document.createElement("div");
+    row.className="bot-row";
+    let h=`<div class="avatar-model">${AVATAR_SVG}</div><div class="msg bot">`;
+    h+=esc(text).replace(/\n/g,"<br>");
+    if(meta){
+      h+=`<div class="tags">`;
+      if(meta.src) h+=`<span class="tag src">${esc(meta.src)}</span>`;
+      if(meta.conf!=null) h+=`<span class="tag conf">اطمینان ${meta.conf}٪</span>`;
+      if(meta.branch) h+=`<span class="tag branch">${esc(meta.branch)}</span>`;
+      h+=`</div>`;
+    }
+    h+=`<div class="meta">درخشا · ${time}</div></div>`;
+    row.innerHTML=h;
+    box.appendChild(row);
+  } else {
+    const d=document.createElement("div");
+    d.className="msg user";
+    d.innerHTML=esc(text).replace(/\n/g,"<br>")+`<div class="meta">شما · ${time}</div>`;
+    box.appendChild(d);
+  }
+  if(scroll) box.scrollTop=box.scrollHeight;
+}
+
+function ask(btn){document.getElementById("inp").value=btn.textContent;send()}
+function onKey(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}}
+function autoH(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,110)+"px"}
+
+function renderAuth(){
+  const s1=document.getElementById("authStepPhone");
+  const s2=document.getElementById("authStepOtp");
+  const s3=document.getElementById("authStepDone");
+  if(user&&user.phone){s1.style.display=s2.style.display="none";s3.style.display="block";document.getElementById("authPhoneShow").textContent=user.phone}
+  else{s3.style.display="none";s2.style.display="none";s1.style.display="block"}
+  syncUserChip();
+}
+function sendOtp(){
+  const phone=document.getElementById("phoneInput").value.trim();
+  if(!/^09\d{9}$/.test(phone)){toast("شماره معتبر: 09xxxxxxxxx");return}
+  sessionStorage.setItem("derakhsha_otp_phone",phone);
+  document.getElementById("phonePreview").textContent=phone;
+  document.getElementById("authStepPhone").style.display="none";
+  document.getElementById("authStepOtp").style.display="block";
+  toast("کد آزمایشی: 123456");
+}
+function verifyOtp(){
+  const otp=document.getElementById("otpInput").value.trim();
+  const phone=sessionStorage.getItem("derakhsha_otp_phone");
+  if(otp!=="123456"){toast("کد نادرست");return}
+  user={phone,loggedAt:new Date().toISOString()};
+  localStorage.setItem("derakhsha_user",JSON.stringify(user));
+  document.getElementById("otpInput").value="";
+  renderAuth(); toast("ورود موفق");
+}
+function backToPhone(){document.getElementById("authStepOtp").style.display="none";document.getElementById("authStepPhone").style.display="block"}
+function logout(){user=null;localStorage.removeItem("derakhsha_user");renderAuth();toast("خارج شدید")}
+function syncUserChip(){
+  const chip=document.getElementById("userChip");
+  const nav=document.getElementById("navAuth");
+  if(user&&user.phone){chip.style.display="inline-block";chip.textContent=user.phone;if(nav)nav.textContent="حساب"}
+  else{chip.style.display="none";if(nav)nav.textContent="ورود"}
+}
+function toggleTheme(){
+  const c=document.documentElement.getAttribute("data-theme")||"dark";
+  const n=c==="dark"?"light":"dark";
+  document.documentElement.setAttribute("data-theme",n);
+  document.getElementById("themeBtn").textContent=n==="dark"?"🌙":"☀️";
+}
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  if(!sessions.length) ensureSession();
+  else if(!currentId || !getCurrent()) currentId = sessions[0].id;
+  renderMessages();
+  renderHistory();
+  syncUserChip();
+});
+</script>
+</body>
+</html>
