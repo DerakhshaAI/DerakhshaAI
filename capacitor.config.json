@@ -1,0 +1,11 @@
+{
+  "appId": "com.derakhsha.app",
+  "appName": "درخشا",
+  "webDir": ".",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}
