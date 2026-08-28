@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>درخشا</title>
+<meta name="theme-color" content="#000000">
+<style>
+:root{
+  --bg:#000;--bg2:#0a0a0a;--card:#111;--line:#2a2a2a;
+  --text:#fff;--muted:#9a9a9a;--soft:#1a1a1a;
+  --font:Tahoma,"Segoe UI",system-ui,sans-serif;
+}
+[data-theme=light]{
+  --bg:#fff;--bg2:#f5f5f5;--card:#fff;--line:#e0e0e0;
+  --text:#000;--muted:#666;--soft:#f0f0f0;
+  --theme-color:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+.logo-svg{color:var(--text)}
+
+.top{
+  height:56px;border-bottom:1px solid var(--line);
+  background:var(--bg);position:sticky;top:0;z-index:30;
+}
+.top-in{max-width:860px;margin:0 auto;height:100%;padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text);font-weight:700;font-size:1rem}
+.brand svg{width:34px;height:34px;display:block}
+.brand em{font-style:normal;font-weight:800}
+.actions{display:flex;gap:6px;align-items:center}
+.btn,.icon{
+  height:34px;border-radius:10px;border:1px solid var(--line);background:var(--card);
+  color:var(--text);font:inherit;font-size:.8rem;font-weight:600;cursor:pointer;
+  padding:0 11px;display:inline-flex;align-items:center;gap:4px;
+}
+.icon{width:34px;padding:0;justify-content:center}
+.btn:hover,.icon:hover{background:var(--soft)}
+.btn-p{background:var(--text);color:var(--bg);border-color:var(--text)}
+.btn-p:hover{opacity:.88}
+
+.shell{max-width:860px;margin:0 auto;min-height:calc(100vh - 56px - 64px);display:flex;flex-direction:column}
+.view{display:none;flex:1;flex-direction:column;min-height:0}
+.view.on{display:flex}
+.msgs{flex:1;overflow-y:auto;padding:16px 12px;display:flex;flex-direction:column;gap:12px}
+
+.hero{margin:auto;text-align:center;max-width:400px;padding:24px 8px 36px}
+.hero .logo-big{width:96px;height:96px;margin:0 auto 14px}
+.hero .logo-big svg{width:100%;height:100%}
+.hero h1{font-size:1.5rem;margin-bottom:6px;letter-spacing:-.02em}
+.hero p{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chips button{border:1px solid var(--line);background:var(--card);color:var(--text);padding:8px 13px;border-radius:999px;font:inherit;font-size:.78rem;cursor:pointer}
+.chips button:hover{background:var(--soft)}
+
+/* کاربر راست — پاسخ چپ (در RTL: flex-end = راست بصری برای user) */
+.u{
+  align-self:flex-start;max-width:78%;
+  background:var(--text);color:var(--bg);
+  padding:11px 14px;border-radius:16px 16px 16px 4px;font-size:.9rem;
+}
+.bwrap{
+  align-self:flex-end;display:flex;gap:8px;max-width:90%;
+  align-items:flex-end;flex-direction:row-reverse;
+}
+.av{
+  width:32px;height:32px;border-radius:10px;border:1px solid var(--line);
+  background:var(--card);display:grid;place-items:center;flex-shrink:0;color:var(--text);
+}
+.av svg{width:20px;height:20px}
+.b{background:var(--card);border:1px solid var(--line);padding:11px 14px;border-radius:16px 4px 16px 16px;font-size:.9rem}
+.meta{font-size:.65rem;color:var(--muted);margin-top:5px}
+.u .meta{color:var(--bg);opacity:.55}
+.pills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.pill{font-size:.62rem;font-weight:600;padding:2px 7px;border-radius:6px;border:1px solid var(--line);color:var(--muted)}
+.cap-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.cap-logo{width:26px;height:26px;border-radius:8px;border:1px solid var(--line);background:var(--soft);display:grid;place-items:center;color:var(--text)}
+.cap-logo svg{width:15px;height:15px}
+.cursor-blink{display:inline-block;width:2px;height:1em;background:var(--text);margin-right:2px;vertical-align:text-bottom;animation:blink .7s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.typing{display:flex;gap:8px;align-items:flex-end;align-self:flex-end;flex-direction:row-reverse}
+.dots{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;display:flex;gap:4px}
+.dots i{width:5px;height:5px;border-radius:50%;background:var(--text);opacity:.3;display:block}
+.dots i:first-child{opacity:1}
+
+.bar{border-top:1px solid var(--line);padding:10px 12px 12px;background:var(--bg)}
+.tools{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.tool{
+  height:32px;padding:0 10px;border-radius:8px;border:1px dashed var(--line);
+  background:transparent;color:var(--muted);font:inherit;font-size:.75rem;font-weight:600;
+  cursor:pointer;display:inline-flex;align-items:center;gap:5px;
+}
+.tool:hover{border-style:solid;color:var(--text)}
+.tool svg{width:14px;height:14px}
+.comp{display:flex;gap:8px;align-items:flex-end;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 6px 6px 12px}
+.comp:focus-within{border-color:var(--text)}
+#inp{flex:1;border:none;background:transparent;color:var(--text);font:inherit;font-size:.9rem;resize:none;outline:none;max-height:110px;padding:7px 0}
+#send{width:38px;height:38px;border:none;border-radius:12px;background:var(--text);color:var(--bg);cursor:pointer;font-size:1rem;flex-shrink:0}
+#send:hover{opacity:.88}
+
+.auth-box{max-width:380px;margin:36px auto;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px}
+.auth-box h1{text-align:center;font-size:1.2rem;margin:8px 0 6px}
+.auth-box .sub{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:16px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:.75rem;color:var(--muted);margin-bottom:4px;font-weight:600}
+.field input{width:100%;height:42px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text);font:inherit;outline:none}
+.field input:focus{border-color:var(--text)}
+.full{width:100%;justify-content:center;height:42px}
+
+.foot{border-top:1px solid var(--line);padding:14px 12px;text-align:center;color:var(--muted);font-size:.72rem}
+.foot a{color:var(--muted);text-decoration:none;font-weight:600}
+.foot a:hover{color:var(--text)}
+.foot strong{color:var(--text)}
+
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:40}
+[data-theme=light] .overlay{background:rgba(0,0,0,.35)}
+.overlay.on{display:block}
+.drawer{position:fixed;top:0;right:0;width:min(300px,90vw);height:100%;background:var(--bg2);border-left:1px solid var(--line);z-index:41;transform:translateX(105%);transition:transform .2s;display:flex;flex-direction:column}
+.drawer.on{transform:translateX(0)}
+.dh{height:56px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);font-weight:700;font-size:.88rem}
+.dl{flex:1;overflow-y:auto;padding:8px}
+.hi{display:flex;gap:6px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px;margin-bottom:6px}
+.hi.active{border-color:var(--text)}
+.hi .pick{flex:1;border:none;background:0;color:var(--text);text-align:right;font:inherit;cursor:pointer;min-width:0}
+.hi .t{font-size:.8rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hi .d{font-size:.65rem;color:var(--muted)}
+.hi .del{width:28px;height:28px;border:1px solid var(--line);background:0;color:var(--muted);border-radius:7px;cursor:pointer}
+
+.modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(360px,92vw);background:var(--card);border:1px solid var(--line);border-radius:18px;z-index:50;padding:28px 20px 22px;text-align:center}
+.modal.on{display:block}
+.modal .logo-anim{width:72px;height:72px;margin:0 auto 14px;color:var(--text);animation:pulse 2s ease-in-out infinite}
+.modal .logo-anim svg{width:100%;height:100%}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.05);opacity:.75}}
+.modal h3{font-size:1rem;margin-bottom:8px}
+.modal p{color:var(--muted);font-size:.88rem;line-height:1.7}
+.modal .x{position:absolute;top:10px;left:12px;border:none;background:0;color:var(--text);font-size:1.25rem;cursor:pointer}
+#infoModal{padding:0;text-align:right}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:8px 16px;border-radius:20px;font-size:.78rem;opacity:0;transition:.2s;z-index:60;pointer-events:none}
+.toast.on{opacity:1}
+@media(max-width:560px){.brand span.t{display:none}}
+
+/* لوگو: شب = سفید روی سیاه | روز = سیاه روی سفید با مرکز معکوس */
+.logo-svg .lg-outer{
+  fill:#fff; stroke:#fff; stroke-width:0.85;
+}
+.logo-svg .lg-center{
+  fill:#000; stroke:#fff; stroke-width:2.5;
+}
+.logo-svg .lg-core{ fill:#fff; }
+.logo-svg .lg-core-dot{ fill:#000; }
+
+[data-theme=light] .logo-svg .lg-outer{
+  fill:#000; stroke:#000; stroke-width:0.85;
+}
+[data-theme=light] .logo-svg .lg-center{
+  fill:#fff; stroke:#000; stroke-width:2.5;
+}
+[data-theme=light] .logo-svg .lg-core{ fill:#000; }
+[data-theme=light] .logo-svg .lg-core-dot{ fill:#fff; }
+
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <a class="brand" href="#" onclick="show('chat');return false;">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="logo-svg">
+  <polygon class="lg-outer" points="45.32,13.66 48.30,22.83 40.51,28.49 32.71,22.83 35.69,13.66" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="53.56,39.01 45.76,44.67 37.96,39.01 40.94,29.84 50.58,29.84" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="32.00,54.67 24.20,49.00 27.18,39.84 36.82,39.84 39.80,49.00" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="10.44,39.01 13.42,29.84 23.06,29.84 26.04,39.01 18.24,44.67" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="18.68,13.66 28.31,13.66 31.29,22.83 23.49,28.49 15.70,22.83" stroke-linejoin="round"/>
+  <polygon class="lg-center" points="32.00,22.50 41.04,29.06 37.58,39.69 26.42,39.69 22.96,29.06" stroke-linejoin="round"/>
+  <circle class="lg-core" cx="32" cy="32" r="3.1"/>
+  <circle class="lg-core-dot" cx="32" cy="32" r="1.35"/>
+</svg>
+    <span class="t">هوش <em>درخشا</em></span>
+  </a>
+  <div class="actions">
+    <button type="button" class="btn" onclick="newChat()">＋ جدید</button>
+    <button type="button" class="icon" onclick="openHist()" title="تاریخچه">☰</button>
+    <button type="button" class="icon" id="th" onclick="theme()" title="تم">☾</button>
+    <button type="button" class="btn btn-p" id="navAuth" onclick="show('auth')">ورود</button>
+  </div>
+</div></header>
+
+<div class="overlay" id="ov" onclick="closeAll()"></div>
+<aside class="drawer" id="dr">
+  <div class="dh"><span>تاریخچه</span><button type="button" class="btn" style="height:30px;padding:0 10px" onclick="closeAll()">بستن</button></div>
+  <div class="dl" id="hist"></div>
+</aside>
+
+<div class="modal" id="voiceModal">
+  <button type="button" class="x" onclick="closeAll()">×</button>
+  <div class="logo-anim"><svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="logo-svg">
+  <polygon class="lg-outer" points="45.32,13.66 48.30,22.83 40.51,28.49 32.71,22.83 35.69,13.66" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="53.56,39.01 45.76,44.67 37.96,39.01 40.94,29.84 50.58,29.84" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="32.00,54.67 24.20,49.00 27.18,39.84 36.82,39.84 39.80,49.00" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="10.44,39.01 13.42,29.84 23.06,29.84 26.04,39.01 18.24,44.67" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="18.68,13.66 28.31,13.66 31.29,22.83 23.49,28.49 15.70,22.83" stroke-linejoin="round"/>
+  <polygon class="lg-center" points="32.00,22.50 41.04,29.06 37.58,39.69 26.42,39.69 22.96,29.06" stroke-linejoin="round"/>
+  <circle class="lg-core" cx="32" cy="32" r="3.1"/>
+  <circle class="lg-core-dot" cx="32" cy="32" r="1.35"/>
+</svg></div>
+  <h3>گفتگوی صوتی</h3>
+  <p>به زودی من هم اضافه می‌شوم برای گفتگو با شما!</p>
+</div>
+<div class="modal" id="uploadModal">
+  <button type="button" class="x" onclick="closeAll()">×</button>
+  <div class="logo-anim"><svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="logo-svg">
+  <polygon class="lg-outer" points="45.32,13.66 48.30,22.83 40.51,28.49 32.71,22.83 35.69,13.66" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="53.56,39.01 45.76,44.67 37.96,39.01 40.94,29.84 50.58,29.84" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="32.00,54.67 24.20,49.00 27.18,39.84 36.82,39.84 39.80,49.00" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="10.44,39.01 13.42,29.84 23.06,29.84 26.04,39.01 18.24,44.67" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="18.68,13.66 28.31,13.66 31.29,22.83 23.49,28.49 15.70,22.83" stroke-linejoin="round"/>
+  <polygon class="lg-center" points="32.00,22.50 41.04,29.06 37.58,39.69 26.42,39.69 22.96,29.06" stroke-linejoin="round"/>
+  <circle class="lg-core" cx="32" cy="32" r="3.1"/>
+  <circle class="lg-core-dot" cx="32" cy="32" r="1.35"/>
+</svg></div>
+  <h3>ارسال سند و تصویر</h3>
+  <p>به زودی امکان افزودن سند و عکس فعال می‌شود.</p>
+</div>
+<div class="modal" id="infoModal">
+  <div style="padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-weight:700">
+    <span id="mt"></span>
+    <button type="button" onclick="closeAll()" style="border:0;background:0;color:var(--text);font-size:1.2rem;cursor:pointer">×</button>
+  </div>
+  <div style="padding:14px;color:var(--muted);font-size:.86rem" id="mb"></div>
+</div>
+
+<div class="shell">
+  <section class="view on" id="v-chat">
+    <div class="msgs" id="msgs"></div>
+    <div class="bar">
+      <div class="tools">
+        <button type="button" class="tool" title="به‌زودی" onclick="openVoice()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a3 3 0 00-3 3v6a3 3 0 006 0V6a3 3 0 00-3-3z"/><path d="M19 11a7 7 0 01-14 0M12 18v3"/></svg>
+          گفتگوی صوتی
+        </button>
+        <button type="button" class="tool" title="به‌زودی" onclick="openUpload()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6M12 18v-6M9 15h6"/></svg>
+          سند / تصویر
+        </button>
+      </div>
+      <div class="comp">
+        <textarea id="inp" rows="1" placeholder="سؤالت را بپرس..."></textarea>
+        <button type="button" id="send" onclick="send()">↑</button>
+      </div>
+    </div>
+  </section>
+  <section class="view" id="v-auth">
+    <div class="auth-box">
+      <div style="text-align:center;color:var(--text)"><svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="logo-svg">
+  <polygon class="lg-outer" points="45.32,13.66 48.30,22.83 40.51,28.49 32.71,22.83 35.69,13.66" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="53.56,39.01 45.76,44.67 37.96,39.01 40.94,29.84 50.58,29.84" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="32.00,54.67 24.20,49.00 27.18,39.84 36.82,39.84 39.80,49.00" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="10.44,39.01 13.42,29.84 23.06,29.84 26.04,39.01 18.24,44.67" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="18.68,13.66 28.31,13.66 31.29,22.83 23.49,28.49 15.70,22.83" stroke-linejoin="round"/>
+  <polygon class="lg-center" points="32.00,22.50 41.04,29.06 37.58,39.69 26.42,39.69 22.96,29.06" stroke-linejoin="round"/>
+  <circle class="lg-core" cx="32" cy="32" r="3.1"/>
+  <circle class="lg-core-dot" cx="32" cy="32" r="1.35"/>
+</svg></div>
+      <div id="authForm">
+        <h1>ورود به درخشا</h1>
+        <p class="sub">نام و شماره همراه</p>
+        <div class="field"><label>نام</label><input id="nameIn" maxlength="40" placeholder="نام شما"></div>
+        <div class="field"><label>شماره همراه</label><input id="phoneIn" maxlength="11" placeholder="09xxxxxxxxx" inputmode="numeric"></div>
+        <div class="field" id="otpF" style="display:none"><label>کد تأیید</label><input id="otpIn" maxlength="6" placeholder="------" inputmode="numeric"></div>
+        <button type="button" class="btn btn-p full" id="authBtn" onclick="authStep()">دریافت کد</button>
+        <p class="sub" style="margin-top:12px">کد آزمایشی: <strong>123456</strong></p>
+      </div>
+      <div id="authDone" style="display:none">
+        <h1>حساب</h1>
+        <p id="authInfo" style="text-align:center;font-weight:600;margin:12px 0"></p>
+        <button type="button" class="btn full" onclick="logout()">خروج</button>
+        <button type="button" class="btn btn-p full" style="margin-top:8px" onclick="show('chat')">گفتگو</button>
+      </div>
+    </div>
+  </section>
+</div>
+<footer class="foot">
+  <div style="margin-bottom:6px">
+    <a href="#" onclick="show('auth');return false;">ورود</a> ·
+    <a href="#" onclick="rules();return false;">قوانین</a> ·
+    <a href="#" onclick="creators();return false;">سازندگان</a>
+  </div>
+  <div>© <span id="y"></span> درخت دانش <strong>درخشا</strong> — تمامی حقوق محفوظ است</div>
+  <div style="margin-top:3px">گروک × احمدرضا ایزدی</div>
+</footer>
+<div class="toast" id="toast"></div>
+<script>
+const API = window.DERAKHSHA_API || "";
+const LOGO = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="logo-svg">
+  <polygon class="lg-outer" points="45.32,13.66 48.30,22.83 40.51,28.49 32.71,22.83 35.69,13.66" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="53.56,39.01 45.76,44.67 37.96,39.01 40.94,29.84 50.58,29.84" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="32.00,54.67 24.20,49.00 27.18,39.84 36.82,39.84 39.80,49.00" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="10.44,39.01 13.42,29.84 23.06,29.84 26.04,39.01 18.24,44.67" stroke-linejoin="round"/>
+  <polygon class="lg-outer" points="18.68,13.66 28.31,13.66 31.29,22.83 23.49,28.49 15.70,22.83" stroke-linejoin="round"/>
+  <polygon class="lg-center" points="32.00,22.50 41.04,29.06 37.58,39.69 26.42,39.69 22.96,29.06" stroke-linejoin="round"/>
+  <circle class="lg-core" cx="32" cy="32" r="3.1"/>
+  <circle class="lg-core-dot" cx="32" cy="32" r="1.35"/>
+</svg>`;
+const CAP = {
+  tree:{name:"درخت دانش",svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20V10"/><path d="M12 10L7 5M12 10l5-5M12 14L6 12M12 14l6-2"/><circle cx="7" cy="5" r="1.5" fill="currentColor"/><circle cx="17" cy="5" r="1.5" fill="currentColor"/></svg>`},
+  relations:{name:"روابط",svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="2" fill="currentColor"/><circle cx="18" cy="6" r="2" fill="currentColor"/><circle cx="12" cy="18" r="2" fill="currentColor"/><path d="M8 7.5L10.5 15M16 7.5L13.5 15"/></svg>`},
+  multi_step:{name:"استدلال",svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 6h6v4H5zM13 10h6v4h-6zM5 14h6v4H5z"/></svg>`},
+  consistency_fix:{name:"صحت",svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>`},
+  clarify:{name:"ابهام",svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 16h.01M10 9a2 2 0 013.5 1.5c0 1.5-2 2-2 3"/></svg>`},
+  discovery:{name:"کشف",svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6"/><path d="M20 20l-3.5-3.5"/></svg>`},
+  default:{name:"درخشا",svg:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l6 4.5v6c0 3.5-2.5 5.5-6 6.5-3.5-1-6-3-6-6.5v-6L12 3z"/></svg>`}
+};
+function capFor(route,source){
+  const r=(route||"").toLowerCase(), s=source||"";
+  if(r==="relations"||s.includes("روابط")) return CAP.relations;
+  if(r==="multi_step"||s.includes("استدلال")) return CAP.multi_step;
+  if(r==="consistency_fix") return CAP.consistency_fix;
+  if(r==="clarify"||s.includes("خطا")) return CAP.clarify;
+  if(s.includes("کشف")) return CAP.discovery;
+  if(r==="tree"||s.includes("هسته")||s.includes("سند")) return CAP.tree;
+  return CAP.default;
+}
+let user=JSON.parse(localStorage.getItem("derakhsha_user")||"null");
+let sessions=JSON.parse(localStorage.getItem("derakhsha_sessions")||"[]");
+let currentId=localStorage.getItem("derakhsha_current")||null;
+let authPhase="form", typingLock=false;
+const sid=()=>(user&&user.phone?"u_"+user.phone:"anon")+"_"+(currentId||"x");
+function save(){localStorage.setItem("derakhsha_sessions",JSON.stringify(sessions));if(currentId)localStorage.setItem("derakhsha_current",currentId)}
+function cur(){return sessions.find(s=>s.id===currentId)||null}
+function ensure(){if(currentId&&cur())return cur();const s={id:"s_"+Date.now(),title:"گفتگوی جدید",messages:[],updated:Date.now()};sessions.unshift(s);currentId=s.id;save();return s}
+function show(v){document.querySelectorAll(".view").forEach(e=>e.classList.remove("on"));document.getElementById("v-"+v).classList.add("on");if(v==="auth")renderAuth();closeAll()}
+function hero(){return `<div class="hero" id="welcome"><div class="logo-big">${LOGO}</div><h1>درخشا</h1><p>سامانه هوش مصنوعی فارسی با معماری درخت دانش</p><div class="chips"><button type="button" onclick="ask(this)">درخشا چیست؟</button><button type="button" onclick="ask(this)">درخت دانش چیست؟</button><button type="button" onclick="ask(this)">سازندگان کیانند؟</button></div></div>`}
+function renderMsgs(){const box=document.getElementById("msgs");const s=cur();if(!s||!s.messages.length){box.innerHTML=hero();return}box.innerHTML="";s.messages.forEach(m=>{if(m.role==="user")addU(m.text,false);else addBInstant(m.text,m.meta)});box.scrollTop=box.scrollHeight}
+function renderHist(){const list=document.getElementById("hist");if(!sessions.length){list.innerHTML='<div style="text-align:center;color:var(--muted);padding:24px;font-size:.85rem">خالی</div>';return}
+list.innerHTML=sessions.map(s=>{const d=new Date(s.updated).toLocaleTimeString("fa-IR",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"});return `<div class="hi ${s.id===currentId?"active":""}"><button type="button" class="pick" onclick="load('${s.id}')"><div class="t">${esc(s.title)}</div><div class="d">${d}</div></button><button type="button" class="del" onclick="delS('${s.id}',event)">×</button></div>`}).join("")}
+function load(id){currentId=id;save();renderMsgs();renderHist();show("chat")}
+function delS(id,ev){if(ev)ev.stopPropagation();sessions=sessions.filter(x=>x.id!==id);if(currentId===id){currentId=sessions[0]?sessions[0].id:null;if(!currentId)ensure()}save();renderHist();renderMsgs();toast("حذف شد")}
+function newChat(){const s={id:"s_"+Date.now(),title:"گفتگوی جدید",messages:[],updated:Date.now()};sessions.unshift(s);currentId=s.id;save();show("chat");renderMsgs();renderHist();toast("گفتگوی جدید")}
+function openHist(){document.getElementById("dr").classList.add("on");document.getElementById("ov").classList.add("on");renderHist()}
+function closeAll(){["dr","ov","voiceModal","uploadModal","infoModal"].forEach(id=>document.getElementById(id).classList.remove("on"))}
+function openVoice(){document.getElementById("voiceModal").classList.add("on");document.getElementById("ov").classList.add("on")}
+function openUpload(){document.getElementById("uploadModal").classList.add("on");document.getElementById("ov").classList.add("on")}
+async function send(){
+  if(typingLock)return;
+  const inp=document.getElementById("inp");const text=inp.value.trim();if(!text)return;
+  const s=ensure();if(s.title==="گفتگوی جدید")s.title=text.slice(0,36)+(text.length>36?"…":"");
+  const w=document.getElementById("welcome");if(w)w.remove();
+  s.messages.push({role:"user",text});addU(text,true);inp.value="";autoH(inp);s.updated=Date.now();save();
+  showTyping(CAP.default);
+  try{
+    const res=await fetch(API+"/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:text,session_id:sid()})});
+    if(!res.ok)throw new Error("http");
+    const data=await res.json();
+    const cap=capFor(data.route,data.source);
+    updateTypingCap(cap);await sleep(250);hideTyping();
+    const meta={src:data.source,conf:data.confidence,branch:data.branch,route:data.route};
+    const answer=data.answer||"پاسخی دریافت نشد";
+    s.messages.push({role:"bot",text:answer,meta});s.updated=Date.now();save();
+    await typeBot(answer,meta,cap);renderHist();
+  }catch(e){
+    hideTyping();
+    const msg="اتصال به موتور برقرار نشد. سرور را بررسی کنید.";
+    s.messages.push({role:"bot",text:msg,meta:{src:"خطا",conf:0,route:"clarify"}});
+    await typeBot(msg,{src:"خطا",conf:0,route:"clarify"},CAP.clarify);
+  }
+}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+function showTyping(cap){
+  const box=document.getElementById("msgs");
+  const el=document.createElement("div");el.className="typing";el.id="ty";
+  el.innerHTML=`<div class="av">${LOGO}</div><div><div class="cap-row" id="tyCap"><div class="cap-logo" title="${esc(cap.name)}">${cap.svg}</div></div><div class="dots"><i></i><i></i><i></i></div></div>`;
+  box.appendChild(el);box.scrollTop=box.scrollHeight;
+}
+function updateTypingCap(cap){const el=document.getElementById("tyCap");if(el)el.innerHTML=`<div class="cap-logo" title="${esc(cap.name)}">${cap.svg}</div>`}
+function hideTyping(){const t=document.getElementById("ty");if(t)t.remove()}
+function addU(text,sc){
+  const box=document.getElementById("msgs");
+  const t=new Date().toLocaleTimeString("fa-IR",{hour:"2-digit",minute:"2-digit"});
+  const d=document.createElement("div");d.className="u";
+  d.innerHTML=esc(text)+`<div class="meta">${t}</div>`;
+  box.appendChild(d);if(sc)box.scrollTop=box.scrollHeight;
+}
+function addBInstant(text,meta){
+  const cap=capFor(meta&&meta.route,meta&&meta.src);
+  const box=document.getElementById("msgs");
+  const t=new Date().toLocaleTimeString("fa-IR",{hour:"2-digit",minute:"2-digit"});
+  const row=document.createElement("div");row.className="bwrap";
+  let h=`<div class="av">${LOGO}</div><div class="b"><div class="cap-row"><div class="cap-logo" title="${esc(cap.name)}">${cap.svg}</div></div><div>${esc(text)}</div>`;
+  if(meta){h+=`<div class="pills">`;if(meta.src)h+=`<span class="pill">${esc(meta.src)}</span>`;if(meta.conf!=null)h+=`<span class="pill">${meta.conf}٪</span>`;if(meta.branch)h+=`<span class="pill">${esc(meta.branch)}</span>`;h+=`</div>`}
+  h+=`<div class="meta">درخشا · ${t}</div></div>`;row.innerHTML=h;box.appendChild(row);
+}
+async function typeBot(text,meta,cap){
+  typingLock=true;
+  const box=document.getElementById("msgs");
+  const t=new Date().toLocaleTimeString("fa-IR",{hour:"2-digit",minute:"2-digit"});
+  const row=document.createElement("div");row.className="bwrap";
+  row.innerHTML=`<div class="av">${LOGO}</div><div class="b"><div class="cap-row"><div class="cap-logo" title="${esc(cap.name)}">${cap.svg}</div></div><div id="typedActive"></div><div class="pills" id="pillsActive" style="display:none"></div><div class="meta" id="metaActive" style="display:none">درخشا · ${t}</div></div>`;
+  box.appendChild(row);
+  const typed=document.getElementById("typedActive");
+  const speed=text.length>400?8:text.length>150?12:16;
+  let i=0;
+  while(i<text.length){
+    const step=text.length>300?3:1;i=Math.min(text.length,i+step);
+    typed.innerHTML=esc(text.slice(0,i))+(i<text.length?'<span class="cursor-blink"></span>':'');
+    box.scrollTop=box.scrollHeight;await sleep(speed);
+  }
+  typed.textContent=text;
+  if(meta){const pills=document.getElementById("pillsActive");if(pills){pills.style.display="flex";let ph="";if(meta.src)ph+=`<span class="pill">${esc(meta.src)}</span>`;if(meta.conf!=null)ph+=`<span class="pill">${meta.conf}٪</span>`;if(meta.branch)ph+=`<span class="pill">${esc(meta.branch)}</span>`;pills.innerHTML=ph;pills.removeAttribute("id")}}
+  const metaEl=document.getElementById("metaActive");if(metaEl){metaEl.style.display="block";metaEl.removeAttribute("id")}
+  typed.removeAttribute("id");typingLock=false;
+}
+function ask(b){document.getElementById("inp").value=b.textContent;send()}
+document.getElementById("inp").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}});
+function autoH(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,110)+"px"}
+document.getElementById("inp").addEventListener("input",function(){autoH(this)});
+function renderAuth(){if(user&&user.phone){document.getElementById("authForm").style.display="none";document.getElementById("authDone").style.display="block";document.getElementById("authInfo").textContent=(user.name?user.name+" · ":"")+user.phone;document.getElementById("navAuth").textContent="حساب"}else{document.getElementById("authDone").style.display="none";document.getElementById("authForm").style.display="block";document.getElementById("otpF").style.display=authPhase==="otp"?"block":"none";document.getElementById("authBtn").textContent=authPhase==="otp"?"ورود":"دریافت کد";document.getElementById("navAuth").textContent="ورود"}}
+function authStep(){if(authPhase==="form"){const name=document.getElementById("nameIn").value.trim();const phone=document.getElementById("phoneIn").value.trim();if(!name){toast("نام را وارد کنید");return}if(!/^09\d{9}$/.test(phone)){toast("شماره نامعتبر");return}sessionStorage.setItem("p",JSON.stringify({name,phone}));authPhase="otp";document.getElementById("otpF").style.display="block";document.getElementById("authBtn").textContent="ورود";toast("کد: 123456")}else{if(document.getElementById("otpIn").value.trim()!=="123456"){toast("کد نادرست");return}const p=JSON.parse(sessionStorage.getItem("p")||"{}");user={name:p.name,phone:p.phone};localStorage.setItem("derakhsha_user",JSON.stringify(user));authPhase="form";renderAuth();toast("ورود موفق")}}
+function logout(){user=null;localStorage.removeItem("derakhsha_user");authPhase="form";document.getElementById("otpF").style.display="none";renderAuth();toast("خارج شدید")}
+function theme(){
+  const n=(document.documentElement.getAttribute("data-theme")||"dark")==="dark"?"light":"dark";
+  document.documentElement.setAttribute("data-theme",n);
+  const b=document.getElementById("th");
+  b.textContent=n==="dark"?"☾":"☀";
+  document.querySelector('meta[name="theme-color"]').setAttribute("content", n==="dark"?"#000000":"#ffffff");
+}
+function rules(){document.getElementById("mt").textContent="قوانین درخشا";document.getElementById("mb").innerHTML="<ul style='padding-right:18px'><li>استفاده قانونی و اخلاقی</li><li>مسئولیت محتوا با کاربر</li><li>پاسخ‌ها راهنما هستند</li><li>سوءاستفاده ممنوع است</li></ul>";document.getElementById("infoModal").classList.add("on");document.getElementById("ov").classList.add("on")}
+function creators(){document.getElementById("mt").textContent="سازندگان";document.getElementById("mb").innerHTML="<p><strong>گروک</strong> و <strong>احمدرضا ایزدی</strong></p>";document.getElementById("infoModal").classList.add("on");document.getElementById("ov").classList.add("on")}
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2000)}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
+const PLACEHOLDERS = [
+  "سؤالت را بپرس...",
+  "چی می‌خوای یاد بگیری؟",
+  "چه خبر؟ از درخشا بپرس...",
+  "موضوع مورد نظرت چیه؟",
+];
+let _ph = 0;
+function rotatePlaceholder(){
+  const inp = document.getElementById("inp");
+  if(!inp) return;
+  if(document.activeElement === inp || (inp.value && inp.value.length)) return;
+  _ph = (_ph + 1) % PLACEHOLDERS.length;
+  inp.setAttribute("placeholder", PLACEHOLDERS[_ph]);
+}
+setInterval(rotatePlaceholder, 3200);
+
+document.addEventListener("DOMContentLoaded",()=>{
+  document.getElementById("y").textContent=new Date().getFullYear();
+  if(!sessions.length)ensure();else if(!currentId||!cur())currentId=sessions[0].id;
+  renderMsgs();renderHist();renderAuth();
+});
+</script>
+</body>
+</html>
